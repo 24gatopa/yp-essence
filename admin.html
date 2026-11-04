@@ -1,0 +1,248 @@
+<title>Panel ÉLITÉ</title>
+<meta name="description" content="Panel del dueño — ÉLITÉ. Administra el catálogo.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap');
+  body{background:#09090b;color:#d4d4d8;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .f-cinzel{font-family:'Cinzel',serif}.f-cormorant{font-family:'Cormorant Garamond',serif}
+  .goldtext{background:linear-gradient(92deg,#fcd34d,#f59e0b 45%,#b45309);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .glow:hover{box-shadow:0 0 22px rgba(245,158,11,.35)}
+  input,select,textarea{background:#131316;border:1px solid #3f3f46;color:#e4e4e7;border-radius:10px;padding:.6rem .8rem;width:100%;font-size:.9rem;outline:none}
+  input:focus,select:focus{border-color:#f59e0b}
+  label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:#a1a1aa;margin-bottom:.3rem;display:block}
+  ::selection{background:#f59e0b;color:#09090b}
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+<div class="min-h-screen bg-zinc-950 text-zinc-300">
+  <div id="boot" class="min-h-screen flex items-center justify-center text-zinc-500 text-sm">Cargando…</div>
+
+  <!-- LOGIN -->
+  <div id="login" hidden class="min-h-[88vh] flex items-center justify-center px-5">
+    <div class="w-full max-w-sm text-center">
+      <div class="goldtext f-cinzel text-4xl font-600" style="letter-spacing:.14em">ÉLITÉ</div>
+      <div class="mt-2 text-[11px] tracking-[0.35em] uppercase text-zinc-500">Panel del dueño</div>
+      <form id="loginForm" class="mt-8 rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6 text-left space-y-4">
+        <div><label>Correo</label><input id="email" type="email" autocomplete="username" placeholder="dueno@elite.com" required></div>
+        <div><label>Contraseña</label><input id="pass" type="password" autocomplete="current-password" placeholder="••••••••" required></div>
+        <button type="submit" class="glow w-full rounded-full bg-gradient-to-r from-amber-400 to-yellow-600 text-zinc-950 font-600 py-3 text-sm tracking-wide transition">Entrar</button>
+        <p id="loginErr" class="text-xs text-red-400 text-center" hidden></p>
+      </form>
+      <p class="mt-3 text-[11px] text-zinc-600">Solo el dueño. Tu sesión es segura (Firebase).</p>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" hidden>
+    <header class="sticky top-0 z-40 border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-xl">
+      <div class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
+        <div class="goldtext f-cinzel text-xl font-600" style="letter-spacing:.16em">ÉLITÉ <span class="text-zinc-500 text-xs tracking-normal font-sans">· Panel</span></div>
+        <div class="flex items-center gap-4">
+          <a href="index.html" target="_blank" class="text-xs tracking-wide uppercase text-zinc-400 hover:text-amber-300 transition">Ver catálogo</a>
+          <button id="logout" class="text-xs tracking-wide uppercase text-zinc-400 hover:text-zinc-100 transition">Salir</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-5 py-8">
+      <div class="flex items-center justify-between gap-4 flex-wrap mb-6">
+        <div>
+          <h1 class="f-cormorant text-3xl text-zinc-100 font-600">Mis perfumes</h1>
+          <p id="stats" class="text-sm text-zinc-500">Cargando…</p>
+        </div>
+        <div class="flex gap-2">
+          <button id="seedBtn" hidden onclick="seed()" class="rounded-full border border-amber-500/40 text-amber-300 px-4 py-2.5 text-sm hover:bg-amber-500/10 transition">Cargar los 29 iniciales</button>
+          <button onclick="openForm()" class="glow inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-yellow-600 text-zinc-950 font-600 px-5 py-2.5 text-sm transition">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Añadir
+          </button>
+        </div>
+      </div>
+      <div id="list" class="space-y-3"></div>
+    </main>
+  </div>
+
+  <!-- MODAL -->
+  <div id="modal" hidden class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start sm:items-center justify-center p-4 overflow-y-auto">
+    <div class="w-full max-w-lg rounded-2xl border border-zinc-800 bg-zinc-950 my-8">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
+        <h3 id="modalTitle" class="f-cormorant text-2xl text-zinc-100 font-600">Añadir perfume</h3>
+        <button onclick="closeForm()" class="text-zinc-500 hover:text-zinc-200 text-2xl leading-none">&times;</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div class="flex items-center gap-4">
+          <div id="photoPrev" class="w-20 h-24 rounded-lg border border-zinc-700 bg-zinc-900 flex items-center justify-center overflow-hidden shrink-0 text-zinc-600 text-xs text-center">sin foto</div>
+          <div class="flex-1"><label>Foto (ideal recortada / fondo claro)</label><input id="f_photo" type="file" accept="image/*" class="text-xs"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label>Nombre *</label><input id="f_name" placeholder="9pm"></div>
+          <div><label>Marca</label><input id="f_brand" placeholder="Afnan"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label>Familia</label><input id="f_fam" placeholder="Oriental dulce"></div>
+          <div><label>Género</label><select id="f_gen"><option>Hombre</option><option>Mujer</option><option>Unisex</option></select></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label>Precio (S/) *</label><input id="f_price" type="number" placeholder="139"></div>
+          <div><label>Notas (coma)</label><input id="f_notes" placeholder="Manzana, Canela, Vainilla"></div>
+        </div>
+        <div class="flex items-center gap-6 pt-1">
+          <label class="flex items-center gap-2 normal-case tracking-normal text-sm text-zinc-300 cursor-pointer" style="margin:0"><input id="f_avail" type="checkbox" checked style="width:1rem;height:1rem">Disponible</label>
+          <label class="flex items-center gap-2 normal-case tracking-normal text-sm text-zinc-300 cursor-pointer" style="margin:0"><input id="f_feat" type="checkbox" style="width:1rem;height:1rem">Destacado</label>
+        </div>
+        <p id="formErr" class="text-xs text-red-400" hidden>Completa nombre y precio.</p>
+      </div>
+      <div class="flex justify-end gap-3 px-6 py-4 border-t border-zinc-800">
+        <button onclick="closeForm()" class="rounded-full border border-zinc-700 px-5 py-2 text-sm text-zinc-300 hover:border-zinc-500 transition">Cancelar</button>
+        <button id="saveBtn" onclick="saveForm()" class="glow rounded-full bg-gradient-to-r from-amber-400 to-yellow-600 text-zinc-950 font-600 px-6 py-2 text-sm transition">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyBD3RbrQUsYtFABqIs_5Pi97DpW034ukYY",
+    authDomain: "elite-114bc.firebaseapp.com",
+    projectId: "elite-114bc",
+    storageBucket: "elite-114bc.firebasestorage.app",
+    messagingSenderId: "544878346059",
+    appId: "1:544878346059:web:42f399a5174087e5f272ce"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var auth = firebase.auth(), db = firebase.firestore();
+  var COL = 'productos';
+  var products = [], editingId = null, photoData = '';
+  var BASEIMG = 'https://24gatopa.github.io/yp-essence/img/';
+  var SEED = [
+    ['9pm.png','9pm','Afnan','Oriental dulce','Hombre',139,'Manzana, Canela, Vainilla'],
+    ['9am-dive.png','9AM Dive','Afnan','Acuático fresco','Hombre',149,'Marino, Cítricos, Ámbar'],
+    ['khamrah.png','Khamrah','Lattafa','Oriental gourmand','Unisex',129,'Canela, Dátiles, Vainilla'],
+    ['khamrah-qahwa.png','Khamrah Qahwa','Lattafa','Oriental café','Unisex',129,'Café, Cardamomo, Caramelo'],
+    ['khamrah-dukhan.png','Khamrah Dukhan','Lattafa','Oriental ahumado','Unisex',139,'Incienso, Canela, Café'],
+    ['asad.png','Asad','Lattafa','Amaderado afrutado','Hombre',125,'Piña, Bergamota, Ámbar gris'],
+    ['asad-bourbon.png','Asad Bourbon','Lattafa','Amaderado especiado','Hombre',139,'Bourbon, Canela, Vainilla'],
+    ['asad-elixir.png','Asad Elixir','Lattafa','Amaderado dulce','Hombre',149,'Piña, Ron, Vainilla'],
+    ['yara.png','Yara','Lattafa','Floral dulce','Mujer',129,'Orquídea, Heliotropo, Sándalo'],
+    ['yara-candy.png','Yara Candy','Lattafa','Gourmand dulce','Mujer',129,'Frutas, Caramelo, Vainilla'],
+    ['yara-moi.png','Yara Moi','Lattafa','Floral frutal','Mujer',129,'Frambuesa, Jazmín, Vainilla'],
+    ['yara-tous.png','Yara Tous','Lattafa','Floral frutal','Mujer',129,'Frutas, Flores, Almizcle'],
+    ['oud-for-glory.png','Oud for Glory','Lattafa','Amaderado oud','Unisex',129,'Oud, Azafrán, Pachulí'],
+    ['honor-glory.png','Honor & Glory','Lattafa','Amaderado ambarado','Unisex',129,'Oud, Ámbar, Especias'],
+    ['bade-sublime.png',"Bade'e Al Oud Sublime",'Lattafa','Oriental oud','Unisex',129,'Oud, Rosa, Azafrán'],
+    ['mandarinsky.png','Mandarin Sky','Armaf','Cítrico ámbar','Hombre',125,'Mandarina, Especias, Ámbar'],
+    ['mandarinsky-elixir.png','Mandarin Sky Elixir','Armaf','Cítrico ámbar intenso','Hombre',149,'Mandarina, Canela, Ámbar'],
+    ['odyssey-limoni.png','Odyssey Limoni','Armaf','Cítrico aromático','Hombre',129,'Limón, Albahaca, Almizcle'],
+    ['odyssey-homme-white.png','Odyssey Homme White','Armaf','Amaderado fresco','Hombre',135,'Bergamota, Lavanda, Cedro'],
+    ['hawas-ice.png','Hawas Ice','Rasasi','Acuático fresco','Hombre',149,'Menta, Cítricos, Ámbar gris'],
+    ['hawas-malibu.png','Hawas Malibu','Rasasi','Acuático afrutado','Hombre',149,'Piña, Coco, Ámbar'],
+    ['amber-oud-gold.png','Amber Oud Gold Edition','Al Haramain','Ambarado afrutado','Unisex',239,'Frutas, Ámbar, Almizcle'],
+    ['most-wanted.png','The Most Wanted','Azzaro','Amaderado especiado','Hombre',299,'Cardamomo, Bourbon, Madera'],
+    ['stronger-intensely.png','Stronger With You Intensely','Armani','Oriental vainilla','Hombre',365,'Cardamomo, Vainilla, Ámbar'],
+    ['acqua-di-gio.png','Acqua di Gio','Giorgio Armani','Acuático cítrico','Hombre',449,'Marino, Bergamota, Pachulí'],
+    ['le-male.png','Le Male','Jean Paul Gaultier','Aromático fougère','Hombre',479,'Lavanda, Menta, Vainilla'],
+    ['le-beau.png','Le Beau','Jean Paul Gaultier','Amaderado coco','Hombre',479,'Coco, Bergamota, Haba tonka'],
+    ['scandal-le-parfum.png','Scandal Le Parfum','Jean Paul Gaultier','Oriental gourmand','Mujer',399,'Miel, Caramelo, Haba tonka'],
+    ['born-in-roma.png','Born in Roma Intense','Valentino','Amaderado aromático','Hombre',479,'Salvia, Vetiver, Vainilla']
+  ];
+
+  function $(id){ return document.getElementById(id); }
+  function show(id){ $(id).hidden=false; } function hide(id){ $(id).hidden=true; }
+
+  auth.onAuthStateChanged(function(user){
+    hide('boot');
+    if(user){ hide('login'); show('app'); listen(); }
+    else { hide('app'); show('login'); }
+  });
+
+  $('loginForm').addEventListener('submit', function(e){
+    e.preventDefault(); $('loginErr').hidden=true;
+    auth.signInWithEmailAndPassword($('email').value.trim(), $('pass').value).catch(function(err){
+      var m = err.code==='auth/invalid-credential'||err.code==='auth/wrong-password'||err.code==='auth/user-not-found' ? 'Correo o contraseña incorrectos.' : (err.code==='auth/unauthorized-domain' ? 'Dominio no autorizado en Firebase (agrégalo en Authentication → Settings).' : err.message);
+      $('loginErr').textContent=m; $('loginErr').hidden=false;
+    });
+  });
+  $('logout').addEventListener('click', function(){ auth.signOut(); });
+
+  function listen(){
+    db.collection(COL).orderBy('orden').onSnapshot(function(snap){
+      products = snap.docs.map(function(d){ var o=d.data(); o.id=d.id; return o; });
+      render();
+    }, function(err){ $('stats').textContent='Error: '+err.message; });
+  }
+
+  function render(){
+    var avail = products.filter(function(p){return p.disponible;}).length;
+    $('stats').textContent = products.length+' perfumes · '+avail+' disponibles · '+(products.length-avail)+' agotados';
+    $('seedBtn').hidden = products.length>0;
+    if(!products.length){ $('list').innerHTML='<div class="text-center text-zinc-500 py-16 border border-dashed border-zinc-800 rounded-2xl">Catálogo vacío. Toca <b class="text-amber-400">Cargar los 29 iniciales</b> o <b class="text-amber-400">Añadir</b>.</div>'; return; }
+    $('list').innerHTML = products.map(function(p){
+      var thumb = p.img ? '<img src="'+p.img+'" class="w-full h-full object-contain">' : '<span class="text-zinc-600 text-[10px]">sin foto</span>';
+      var badge = p.disponible ? '<span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300">Disponible</span>' : '<span class="text-[11px] px-2 py-0.5 rounded-full bg-zinc-700/40 text-zinc-400">Agotado</span>';
+      var feat = p.destacado ? '<span class="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300">★ Destacado</span>' : '';
+      return '<div class="flex items-center gap-4 rounded-xl border border-zinc-800 bg-zinc-900/40 p-3">'
+        +'<div class="w-14 h-16 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden shrink-0">'+thumb+'</div>'
+        +'<div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><span class="f-cormorant text-xl text-zinc-100 font-600">'+esc(p.nombre)+'</span><span class="text-[11px] uppercase tracking-wide text-amber-400/70">'+esc(p.marca||'')+'</span></div>'
+        +'<div class="text-xs text-zinc-500">'+esc(p.fam||'')+' · '+esc(p.genero)+'</div>'
+        +'<div class="flex gap-2 mt-1.5">'+badge+feat+'</div></div>'
+        +'<div class="text-right shrink-0"><div class="f-cormorant text-xl text-zinc-100 font-600">S/ '+p.precio+'</div>'
+        +'<div class="flex gap-2 mt-2"><button onclick="openForm(\''+p.id+'\')" class="text-xs px-3 py-1 rounded-full border border-zinc-700 text-zinc-300 hover:border-amber-400 hover:text-amber-300 transition">Editar</button>'
+        +'<button onclick="del(\''+p.id+'\')" class="text-xs px-3 py-1 rounded-full border border-zinc-800 text-zinc-500 hover:border-red-500/50 hover:text-red-400 transition">Borrar</button></div></div></div>';
+    }).join('');
+  }
+  function esc(s){ return String(s==null?'':s).replace(/[<>&"]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];}); }
+
+  function openForm(id){
+    editingId = id||null; photoData='';
+    $('photoPrev').innerHTML='sin foto'; $('formErr').hidden=true; $('f_photo').value='';
+    var p = id ? products.find(function(x){return x.id===id;}) : null;
+    $('modalTitle').textContent = p?'Editar perfume':'Añadir perfume';
+    $('f_name').value=p?p.nombre:''; $('f_brand').value=p?(p.marca||''):''; $('f_fam').value=p?(p.fam||''):'';
+    $('f_gen').value=p?p.genero:'Hombre'; $('f_price').value=p?p.precio:''; $('f_notes').value=p?(p.notas||[]).join(', ') :'';
+    $('f_avail').checked=p?!!p.disponible:true; $('f_feat').checked=p?!!p.destacado:false;
+    if(p&&p.img){ photoData=''; $('photoPrev').innerHTML='<img src="'+p.img+'" class="w-full h-full object-contain">'; }
+    show('modal');
+  }
+  function closeForm(){ hide('modal'); }
+  $('f_photo').addEventListener('change', function(e){
+    var file=e.target.files[0]; if(!file) return;
+    var img=new Image(), r=new FileReader();
+    r.onload=function(ev){ img.onload=function(){
+      var s=Math.min(1, 560/img.width), w=Math.round(img.width*s), h=Math.round(img.height*s);
+      var c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
+      photoData=c.toDataURL('image/png');
+      $('photoPrev').innerHTML='<img src="'+photoData+'" class="w-full h-full object-contain">';
+    }; img.src=ev.target.result; };
+    r.readAsDataURL(file);
+  });
+  function saveForm(){
+    var name=$('f_name').value.trim(), price=$('f_price').value.trim();
+    if(!name||!price){ $('formErr').hidden=false; return; }
+    $('saveBtn').disabled=true; $('saveBtn').textContent='Guardando…';
+    var data={ nombre:name, marca:$('f_brand').value.trim(), fam:$('f_fam').value.trim(), genero:$('f_gen').value,
+      precio:Number(price), notas:$('f_notes').value.split(',').map(function(s){return s.trim();}).filter(Boolean),
+      disponible:$('f_avail').checked, destacado:$('f_feat').checked };
+    if(photoData) data.img=photoData;
+    var op;
+    if(editingId){ op=db.collection(COL).doc(editingId).update(data); }
+    else { data.img=data.img||''; data.orden=Date.now(); data.creado=firebase.firestore.FieldValue.serverTimestamp(); op=db.collection(COL).add(data); }
+    op.then(function(){ closeForm(); }).catch(function(err){ $('formErr').textContent='Error al guardar: '+err.message; $('formErr').hidden=false; })
+      .finally(function(){ $('saveBtn').disabled=false; $('saveBtn').textContent='Guardar'; });
+  }
+  function del(id){ if(confirm('¿Borrar este perfume?')) db.collection(COL).doc(id).delete().catch(function(e){alert('Error: '+e.message);}); }
+
+  function seed(){
+    if(!confirm('¿Cargar los 29 perfumes iniciales?')) return;
+    $('seedBtn').disabled=true; $('seedBtn').textContent='Cargando…';
+    var batch=db.batch();
+    SEED.forEach(function(s,i){
+      var ref=db.collection(COL).doc();
+      batch.set(ref,{ nombre:s[1], marca:s[2], fam:s[3], genero:s[4], precio:s[5],
+        notas:s[6].split(',').map(function(x){return x.trim();}), img:BASEIMG+s[0],
+        disponible:true, destacado:false, orden:i, creado:firebase.firestore.FieldValue.serverTimestamp() });
+    });
+    batch.commit().then(function(){ $('seedBtn').hidden=true; }).catch(function(err){ alert('Error al cargar: '+err.message); })
+      .finally(function(){ $('seedBtn').disabled=false; $('seedBtn').textContent='Cargar los 29 iniciales'; });
+  }
+</script>
