@@ -1,0 +1,112 @@
+<title>ÉLITÉ · Perfume</title>
+<meta name="description" content="Detalle del perfume — ÉLITÉ.">
+<meta name="theme-color" content="#09090b">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap');
+  body{background:#09090b;color:#d4d4d8;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .f-cinzel{font-family:'Cinzel',serif}.f-cormorant{font-family:'Cormorant Garamond',serif}
+  .goldtext{background:linear-gradient(92deg,#fcd34d,#f59e0b 45%,#b45309);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .glow-hover{transition:box-shadow .3s ease-in-out,transform .3s ease-in-out}
+  .glow-hover:hover{box-shadow:0 0 24px rgba(245,158,11,.35);transform:translateY(-2px)}
+  .vanilla-tilt{transform-style:preserve-3d}
+  ::selection{background:#f59e0b;color:#09090b}
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}};</script>
+
+<div class="min-h-screen bg-zinc-950 text-zinc-300 antialiased overflow-x-hidden">
+  <header class="sticky top-0 z-50 border-b border-zinc-800/60 bg-zinc-950/70 backdrop-blur-xl">
+    <nav class="max-w-5xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="goldtext f-cinzel text-xl font-600" style="letter-spacing:.18em">ÉLITÉ</a>
+      <a href="index.html" class="inline-flex items-center gap-2 text-xs tracking-[0.14em] uppercase text-zinc-400 hover:text-amber-300 transition duration-300">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 18l-6-6 6-6"/></svg>Volver al catálogo
+      </a>
+    </nav>
+  </header>
+
+  <main id="detail" class="max-w-5xl mx-auto px-5 sm:px-8 py-10 sm:py-16"></main>
+
+  <div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16 text-center">
+    <a href="index.html" class="inline-flex items-center gap-2 rounded-full border border-zinc-700 px-6 py-3 text-sm text-zinc-300 hover:border-amber-400 hover:text-amber-300 transition duration-300">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 18l-6-6 6-6"/></svg>Volver al catálogo
+    </a>
+  </div>
+
+  <footer class="border-t border-zinc-800/60 bg-zinc-900/30 py-8 text-center">
+    <div class="goldtext f-cinzel text-xl font-600" style="letter-spacing:.16em">ÉLITÉ</div>
+    <div class="mt-1 text-[11px] tracking-[0.3em] uppercase text-zinc-600">Más allá de lo ordinario</div>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+<script>
+  var NC={'Manzana':'#8FB85A','Canela':'#C07A45','Vainilla':'#E6D4A0','Dátiles':'#9A6A3C','Orquídea':'#C98BB0','Sándalo':'#C9A36A','Piña':'#E3C24A','Bergamota':'#CBD15A','Ámbar gris':'#B9A88A','Azahar':'#E8E0C0','Lavanda':'#9B86D0','Pachulí':'#7E8A5A','Ámbar':'#E0A54E','Café':'#6F4E37','Cardamomo':'#A7B85A','Caramelo':'#C98A3C','Incienso':'#C9C2B0','Bourbon':'#B5793F','Ron':'#A0522D','Heliotropo':'#C9A0C0','Frutas':'#E0913C','Frambuesa':'#C0506A','Jazmín':'#E8E0C0','Flores':'#D98AA6','Almizcle':'#C9BEA8','Marino':'#5FA8C9','Cítricos':'#CBD15A','Mandarina':'#E0913C','Especias':'#C75D4A','Limón':'#CBD15A','Albahaca':'#7E9B5A','Cedro':'#9A8A5A','Oud':'#6E4A3A','Azafrán':'#E0A54E','Rosa':'#D98AA6','Coco':'#E8E0C0','Menta':'#7FB58A','Madera':'#9A7B5A','Haba tonka':'#A06A45','Miel':'#E0A54E','Salvia':'#7E9B5A','Vetiver':'#7E8A5A'};
+  var D=[
+    ['img/9pm.png','9pm','Afnan','Oriental dulce','Hombre',139,'Manzana, Canela, Vainilla'],
+    ['img/9am-dive.png','9AM Dive','Afnan','Acuático fresco','Hombre',149,'Marino, Cítricos, Ámbar'],
+    ['img/khamrah.png','Khamrah','Lattafa','Oriental gourmand','Unisex',129,'Canela, Dátiles, Vainilla'],
+    ['img/khamrah-qahwa.png','Khamrah Qahwa','Lattafa','Oriental café','Unisex',129,'Café, Cardamomo, Caramelo'],
+    ['img/khamrah-dukhan.png','Khamrah Dukhan','Lattafa','Oriental ahumado','Unisex',139,'Incienso, Canela, Café'],
+    ['img/asad.png','Asad','Lattafa','Amaderado afrutado','Hombre',125,'Piña, Bergamota, Ámbar gris'],
+    ['img/asad-bourbon.png','Asad Bourbon','Lattafa','Amaderado especiado','Hombre',139,'Bourbon, Canela, Vainilla'],
+    ['img/asad-elixir.png','Asad Elixir','Lattafa','Amaderado dulce','Hombre',149,'Piña, Ron, Vainilla'],
+    ['img/yara.png','Yara','Lattafa','Floral dulce','Mujer',129,'Orquídea, Heliotropo, Sándalo'],
+    ['img/yara-candy.png','Yara Candy','Lattafa','Gourmand dulce','Mujer',129,'Frutas, Caramelo, Vainilla'],
+    ['img/yara-moi.png','Yara Moi','Lattafa','Floral frutal','Mujer',129,'Frambuesa, Jazmín, Vainilla'],
+    ['img/yara-tous.png','Yara Tous','Lattafa','Floral frutal','Mujer',129,'Frutas, Flores, Almizcle'],
+    ['img/oud-for-glory.png','Oud for Glory','Lattafa','Amaderado oud','Unisex',129,'Oud, Azafrán, Pachulí'],
+    ['img/honor-glory.png','Honor & Glory','Lattafa','Amaderado ambarado','Unisex',129,'Oud, Ámbar, Especias'],
+    ['img/bade-sublime.png',"Bade'e Al Oud Sublime",'Lattafa','Oriental oud','Unisex',129,'Oud, Rosa, Azafrán'],
+    ['img/mandarinsky.png','Mandarin Sky','Armaf','Cítrico ámbar','Hombre',125,'Mandarina, Especias, Ámbar'],
+    ['img/mandarinsky-elixir.png','Mandarin Sky Elixir','Armaf','Cítrico ámbar intenso','Hombre',149,'Mandarina, Canela, Ámbar'],
+    ['img/odyssey-limoni.png','Odyssey Limoni','Armaf','Cítrico aromático','Hombre',129,'Limón, Albahaca, Almizcle'],
+    ['img/odyssey-homme-white.png','Odyssey Homme White','Armaf','Amaderado fresco','Hombre',135,'Bergamota, Lavanda, Cedro'],
+    ['img/hawas-ice.png','Hawas Ice','Rasasi','Acuático fresco','Hombre',149,'Menta, Cítricos, Ámbar gris'],
+    ['img/hawas-malibu.png','Hawas Malibu','Rasasi','Acuático afrutado','Hombre',149,'Piña, Coco, Ámbar'],
+    ['img/amber-oud-gold.png','Amber Oud Gold Edition','Al Haramain','Ambarado afrutado','Unisex',239,'Frutas, Ámbar, Almizcle'],
+    ['img/most-wanted.png','The Most Wanted','Azzaro','Amaderado especiado','Hombre',299,'Cardamomo, Bourbon, Madera'],
+    ['img/stronger-intensely.png','Stronger With You Intensely','Armani','Oriental vainilla','Hombre',365,'Cardamomo, Vainilla, Ámbar'],
+    ['img/acqua-di-gio.png','Acqua di Gio','Giorgio Armani','Acuático cítrico','Hombre',449,'Marino, Bergamota, Pachulí'],
+    ['img/le-male.png','Le Male','Jean Paul Gaultier','Aromático fougère','Hombre',479,'Lavanda, Menta, Vainilla'],
+    ['img/le-beau.png','Le Beau','Jean Paul Gaultier','Amaderado coco','Hombre',479,'Coco, Bergamota, Haba tonka'],
+    ['img/scandal-le-parfum.png','Scandal Le Parfum','Jean Paul Gaultier','Oriental gourmand','Mujer',399,'Miel, Caramelo, Haba tonka'],
+    ['img/born-in-roma.png','Born in Roma Intense','Valentino','Amaderado aromático','Hombre',479,'Salvia, Vetiver, Vainilla']
+  ];
+  var i=parseInt(new URLSearchParams(location.search).get('i'),10);
+  if(isNaN(i)||i<0||i>=D.length) i=0;
+  var a=D[i];
+  var p={img:a[0],name:a[1],brand:a[2],fam:a[3],gen:a[4],price:a[5],notes:a[6].split(',').map(function(s){return s.trim();})};
+  document.title = p.name+' · ÉLITÉ';
+
+  function chip(n){ var c=NC[n]||'#a1a1aa'; return '<span class="inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm text-zinc-200" style="border-color:'+c+'4d;background:'+c+'14"><span class="rounded-full" style="width:9px;height:9px;background:'+c+'"></span>'+n+'</span>'; }
+  function wa(){ return 'https://wa.me/51938430692?text='+encodeURIComponent('Hola ÉLITÉ 👋, me interesa el *'+p.name+' de '+p.brand+'* (100 ml). ¿Está disponible?'); }
+  var genTxt = p.gen==='Mujer'?'para ella':(p.gen==='Hombre'?'para él':'unisex');
+
+  document.getElementById('detail').innerHTML =
+    '<div class="grid md:grid-cols-2 gap-10 items-center">'
+    + '<div class="relative flex justify-center" style="perspective:1100px">'
+      + '<div class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[330px] h-[330px] rounded-full" style="background:radial-gradient(circle,rgba(245,158,11,.22),rgba(245,158,11,.05) 42%,transparent 68%);filter:blur(10px)"></div>'
+      + '<div data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-scale="1.03" class="vanilla-tilt relative">'
+        + '<img src="'+p.img+'" alt="'+p.name+' de '+p.brand+'" class="relative z-10 w-[230px] sm:w-[300px] object-contain drop-shadow-[0_30px_45px_rgba(0,0,0,0.7)]">'
+      + '</div>'
+    + '</div>'
+    + '<div>'
+      + '<div class="text-xs tracking-[0.3em] uppercase text-amber-400/80">'+p.brand+'</div>'
+      + '<h1 class="f-cormorant text-5xl sm:text-6xl text-zinc-100 font-700 leading-none mt-1">'+p.name+'</h1>'
+      + '<div class="mt-3 text-sm tracking-[0.1em] uppercase text-zinc-400">'+p.fam+' · '+p.gen+'</div>'
+      + '<p class="mt-5 text-zinc-400 leading-relaxed max-w-md">Una fragancia <span class="text-zinc-200">'+p.fam.toLowerCase()+'</span> '+genTxt+', de '+p.brand+'. Sus notas de '+p.notes.join(', ')+' crean una firma de alta concentración y larga duración, pensada para dejar huella.</p>'
+      + '<div class="mt-5 flex flex-wrap gap-2">'+p.notes.map(chip).join('')+'</div>'
+      + '<div class="mt-4 flex flex-wrap gap-2">'
+        + '<span class="rounded-full border border-zinc-800 bg-zinc-900/50 px-3 py-1 text-[11px] uppercase tracking-wide text-zinc-400">100 ml</span>'
+        + '<span class="rounded-full border border-zinc-800 bg-zinc-900/50 px-3 py-1 text-[11px] uppercase tracking-wide text-zinc-400">EDP</span>'
+        + '<span class="rounded-full border border-zinc-800 bg-zinc-900/50 px-3 py-1 text-[11px] uppercase tracking-wide text-zinc-400">Larga duración</span>'
+      + '</div>'
+      + '<div class="mt-8 flex flex-wrap items-center gap-5">'
+        + '<div><div class="text-[11px] uppercase tracking-wide text-zinc-500">Precio</div><div class="f-cormorant font-700 text-4xl text-zinc-100">S/ '+p.price+'</div></div>'
+        + '<a href="'+wa()+'" target="_blank" rel="noopener" class="glow-hover inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-yellow-600 px-7 py-3.5 text-sm font-600 tracking-wide text-zinc-950">'
+          + '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.506 5.26l-.999 3.648 3.993-1.007z"/></svg>Pedir por WhatsApp</a>'
+      + '</div>'
+    + '</div>'
+    + '</div>';
+  if(window.VanillaTilt) VanillaTilt.init(document.querySelectorAll('[data-tilt]'));
+</script>
