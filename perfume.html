@@ -24,7 +24,7 @@
     </nav>
   </header>
 
-  <main id="detail" class="max-w-5xl mx-auto px-5 sm:px-8 py-10 sm:py-14"></main>
+  <main id="detail" class="max-w-5xl mx-auto px-5 sm:px-8 py-10 sm:py-14"><div class="text-center text-zinc-500 py-20">Cargando…</div></main>
 
   <div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16 text-center">
     <a href="index.html" class="inline-flex items-center gap-2 rounded-full border border-zinc-700 px-6 py-3 text-sm text-zinc-300 hover:border-amber-400 hover:text-amber-300 transition duration-300">
@@ -39,6 +39,8 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 <script>
   var NC={'Manzana':'#8FB85A','Canela':'#C07A45','Vainilla':'#E6D4A0','Dátiles':'#9A6A3C','Orquídea':'#C98BB0','Sándalo':'#C9A36A','Piña':'#E3C24A','Bergamota':'#CBD15A','Ámbar gris':'#B9A88A','Azahar':'#E8E0C0','Lavanda':'#9B86D0','Pachulí':'#7E8A5A','Ámbar':'#E0A54E','Café':'#6F4E37','Cardamomo':'#A7B85A','Caramelo':'#C98A3C','Incienso':'#C9C2B0','Bourbon':'#B5793F','Ron':'#A0522D','Heliotropo':'#C9A0C0','Frutas':'#E0913C','Frambuesa':'#C0506A','Jazmín':'#E8E0C0','Flores':'#D98AA6','Almizcle':'#C9BEA8','Marino':'#5FA8C9','Cítricos':'#CBD15A','Mandarina':'#E0913C','Especias':'#C75D4A','Limón':'#CBD15A','Albahaca':'#7E9B5A','Cedro':'#9A8A5A','Oud':'#6E4A3A','Azafrán':'#E0A54E','Rosa':'#D98AA6','Coco':'#E8E0C0','Menta':'#7FB58A','Madera':'#9A7B5A','Haba tonka':'#A06A45','Miel':'#E0A54E','Salvia':'#7E9B5A','Vetiver':'#7E8A5A'};
   var D=[
@@ -72,25 +74,19 @@
     ['img/scandal-le-parfum.png','Scandal Le Parfum','Jean Paul Gaultier','Oriental gourmand','Mujer',399,'Miel, Caramelo, Haba tonka'],
     ['img/born-in-roma.png','Born in Roma Intense','Valentino','Amaderado aromático','Hombre',479,'Salvia, Vetiver, Vainilla']
   ];
-  var i=parseInt(new URLSearchParams(location.search).get('i'),10);
-  if(isNaN(i)||i<0||i>=D.length) i=0;
-  var a=D[i];
-  var p={img:a[0],name:a[1],brand:a[2],fam:a[3],gen:a[4],price:a[5],notes:a[6].split(',').map(function(s){return s.trim();})};
-  document.title = p.name+' · ÉLITÉ';
-
+  var SC={Invierno:'#7FB0C9','Otoño':'#B5673A',Primavera:'#8FB56A',Verano:'#E6B84E'};
   function chip(n){ var c=NC[n]||'#a1a1aa'; return '<span class="inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-sm text-zinc-200" style="border-color:'+c+'4d;background:'+c+'14"><span class="rounded-full" style="width:9px;height:9px;background:'+c+'"></span>'+n+'</span>'; }
-  function wa(){ return 'https://wa.me/51938430692?text='+encodeURIComponent('Hola ÉLITÉ 👋, me interesa el *'+p.name+' de '+p.brand+'* (100 ml). ¿Está disponible?'); }
-
-  // Perfil derivado de la familia / marca / nombre
+  function wa(p){ return 'https://wa.me/51938430692?text='+encodeURIComponent('Hola ÉLITÉ 👋, me interesa el *'+p.name+' de '+p.brand+'* (100 ml). ¿Está disponible?'); }
+  function bar(pct,grad){ return '<span class="block h-2.5 rounded-full bg-zinc-800 overflow-hidden"><span class="block h-full rounded-full" style="width:'+pct+'%;background:'+(grad||'linear-gradient(90deg,#fbbf24,#f59e0b)')+'"></span></span>'; }
   function profile(p){
-    var fam=p.fam.toLowerCase(), key=(p.name+' '+p.fam).toLowerCase();
+    var fam=(p.fam||'').toLowerCase(), key=((p.name||'')+' '+(p.fam||'')).toLowerCase();
     var noche = /oriental|dulce|gourmand|[áa]mbar|oud|amaderad|especiad|tabaco|cuero|caf[ée]|ahumado/.test(fam) ? 80
               : /c[íi]tric|acu[áa]tic|fresc|arom[áa]tic|marino/.test(fam) ? 25
               : /floral/.test(fam) ? 48 : 55;
     var est = noche>=60 ? {Invierno:92,'Otoño':82,Primavera:45,Verano:26}
             : noche<=35 ? {Invierno:28,'Otoño':48,Primavera:82,Verano:92}
             : {Invierno:55,'Otoño':62,Primavera:78,Verano:60};
-    var arabic=/lattafa|afnan|armaf|rasasi|haramain/.test(p.brand.toLowerCase());
+    var arabic=/lattafa|afnan|armaf|rasasi|haramain/.test((p.brand||'').toLowerCase());
     var strong=/intens|elixir|extrait|parfum|oud|amber|[áa]mbar|khamrah|asad|glory/.test(key);
     var longH=strong?9:(arabic?8:7), longPct=strong?88:(arabic?80:68);
     var sill=strong?88:(arabic?80:64), sillTxt=sill>=80?'Fuerte':(sill>=60?'Moderada-fuerte':'Moderada');
@@ -99,15 +95,11 @@
               : 'Día y noche · versátil, todo el año';
     return {noche:noche,est:est,longH:longH,longPct:longPct,sill:sill,sillTxt:sillTxt,ideal:ideal};
   }
-  var pr=profile(p);
-  var SC={Invierno:'#7FB0C9','Otoño':'#B5673A',Primavera:'#8FB56A',Verano:'#E6B84E'};
-  function bar(pct,grad){ return '<span class="block h-2.5 rounded-full bg-zinc-800 overflow-hidden"><span class="block h-full rounded-full" style="width:'+pct+'%;background:'+(grad||'linear-gradient(90deg,#fbbf24,#f59e0b)')+'"></span></span>'; }
-  function seasons(){ return Object.keys(pr.est).map(function(s){ var c=SC[s],v=pr.est[s];
+  function seasons(pr){ return Object.keys(pr.est).map(function(s){ var c=SC[s],v=pr.est[s];
     return '<div class="text-center"><div class="mx-auto rounded-full" style="width:30px;height:30px;background:'+c+';opacity:'+(0.35+v/170)+'"></div><div class="mt-2 h-1.5 rounded-full bg-zinc-800 overflow-hidden"><span class="block h-full rounded-full" style="width:'+v+'%;background:'+c+'"></span></div><div class="mt-1.5 text-[11px] uppercase tracking-wide text-zinc-500">'+s+'</div></div>'; }).join(''); }
-
-  function related(){
-    var o=[]; for(var j=0;j<D.length;j++){ if(j!==i && D[j][4]===p.gen) o.push(j); }
-    if(o.length<4){ for(var k=0;k<D.length;k++){ if(k!==i && o.indexOf(k)<0) o.push(k); } }
+  function related(p){
+    var o=[]; for(var j=0;j<D.length;j++){ if(D[j][1]!==p.name && D[j][4]===p.gen) o.push(j); }
+    if(o.length<4){ for(var k=0;k<D.length;k++){ if(D[k][1]!==p.name && o.indexOf(k)<0) o.push(k); } }
     o=o.slice(0,4);
     return o.map(function(j){ var d=D[j];
       return '<a href="perfume.html?i='+j+'" class="group rounded-xl border border-zinc-800 bg-zinc-900/40 p-3 transition duration-300 hover:-translate-y-1 hover:border-amber-500/30 block">'
@@ -117,44 +109,58 @@
         +'<div class="text-xs text-zinc-500 mt-0.5">S/ '+d[5]+'</div></a>';
     }).join('');
   }
-
-  var genTxt = p.gen==='Mujer'?'para ella':(p.gen==='Hombre'?'para él':'unisex');
-  document.getElementById('detail').innerHTML =
-    '<div class="grid md:grid-cols-2 gap-10 items-center">'
-    + '<div class="relative flex justify-center" style="perspective:1100px">'
-      + '<div class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[330px] h-[330px] rounded-full" style="background:radial-gradient(circle,rgba(245,158,11,.22),rgba(245,158,11,.05) 42%,transparent 68%);filter:blur(10px)"></div>'
-      + '<div data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-scale="1.03" class="vanilla-tilt relative"><img src="'+p.img+'" alt="'+p.name+' de '+p.brand+'" class="relative z-10 w-[230px] sm:w-[300px] object-contain drop-shadow-[0_30px_45px_rgba(0,0,0,0.7)]"></div>'
-    + '</div>'
-    + '<div>'
-      + '<div class="text-xs tracking-[0.3em] uppercase text-amber-400/80">'+p.brand+'</div>'
-      + '<h1 class="f-cormorant text-5xl sm:text-6xl text-zinc-100 font-700 leading-none mt-1">'+p.name+'</h1>'
-      + '<div class="mt-3 text-sm tracking-[0.1em] uppercase text-zinc-400">'+p.fam+' · '+p.gen+'</div>'
-      + '<p class="mt-5 text-zinc-400 leading-relaxed max-w-md">Una fragancia <span class="text-zinc-200">'+p.fam.toLowerCase()+'</span> '+genTxt+', de '+p.brand+'. Sus notas de '+p.notes.join(', ')+' crean una firma de alta concentración y larga duración.</p>'
-      + '<div class="mt-5 flex flex-wrap gap-2">'+p.notes.map(chip).join('')+'</div>'
-      + '<div class="mt-8 flex flex-wrap items-center gap-5">'
-        + '<div><div class="text-[11px] uppercase tracking-wide text-zinc-500">Precio</div><div class="f-cormorant font-700 text-4xl text-zinc-100">S/ '+p.price+'</div></div>'
-        + '<a href="'+wa()+'" target="_blank" rel="noopener" class="glow-hover inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-yellow-600 px-7 py-3.5 text-sm font-600 tracking-wide text-zinc-950"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.506 5.26l-.999 3.648 3.993-1.007z"/></svg>Pedir por WhatsApp</a>'
+  function draw(p){
+    document.title = p.name+' · ÉLITÉ';
+    var pr=profile(p);
+    var genTxt = p.gen==='Mujer'?'para ella':(p.gen==='Hombre'?'para él':'unisex');
+    var agot = (p.disponible===false);
+    document.getElementById('detail').innerHTML =
+      '<div class="grid md:grid-cols-2 gap-10 items-center">'
+      + '<div class="relative flex justify-center" style="perspective:1100px">'
+        + '<div class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[330px] h-[330px] rounded-full" style="background:radial-gradient(circle,rgba(245,158,11,.22),rgba(245,158,11,.05) 42%,transparent 68%);filter:blur(10px)"></div>'
+        + '<div data-tilt data-tilt-max="12" data-tilt-speed="500" data-tilt-scale="1.03" class="vanilla-tilt relative"><img src="'+p.img+'" alt="'+p.name+' de '+p.brand+'" class="relative z-10 w-[230px] sm:w-[300px] object-contain'+(agot?' grayscale':'')+' drop-shadow-[0_30px_45px_rgba(0,0,0,0.7)]"></div>'
       + '</div>'
-    + '</div>'
-    + '</div>'
-    // ===== PERFIL / OCASIÓN =====
-    + '<section class="mt-14 border-t border-zinc-800/60 pt-10">'
-      + '<h2 class="f-cormorant text-3xl text-zinc-100 font-600">Perfil olfativo</h2>'
-      + '<p class="text-sm text-zinc-500 mb-7">para qué ocasión es ideal</p>'
-      + '<div class="grid sm:grid-cols-2 gap-4">'
-        + '<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6"><div class="text-[11px] uppercase tracking-[0.18em] text-zinc-500 mb-2">Duración</div><div class="f-cormorant text-xl text-zinc-100 mb-3">'+pr.longH+' h · '+(pr.longPct>=80?'Muy duradera':'Duradera')+'</div>'+bar(pr.longPct)+'</div>'
-        + '<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6"><div class="text-[11px] uppercase tracking-[0.18em] text-zinc-500 mb-2">Estela (proyección)</div><div class="f-cormorant text-xl text-zinc-100 mb-3">'+pr.sillTxt+'</div>'+bar(pr.sill)+'</div>'
-        + '<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6"><div class="text-[11px] uppercase tracking-[0.18em] text-zinc-500 mb-2">Momento del día</div><div class="f-cormorant text-xl text-zinc-100 mb-4">'+(pr.noche>=60?'Más de noche':pr.noche<=35?'Más de día':'Día y noche')+'</div><div class="relative h-2.5 rounded-full" style="background:linear-gradient(90deg,#E9C46A,#1a1333 55%,#4C5B9A)"><span class="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 ring-4 ring-amber-500/20" style="left:'+pr.noche+'%"></span></div><div class="mt-2 flex justify-between text-[11px] uppercase tracking-wide text-zinc-500"><span>Día</span><span>Noche</span></div></div>'
-        + '<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6"><div class="text-[11px] uppercase tracking-[0.18em] text-zinc-500 mb-4">Estaciones</div><div class="grid grid-cols-4 gap-3">'+seasons()+'</div></div>'
+      + '<div>'
+        + '<div class="text-xs tracking-[0.3em] uppercase text-amber-400/80">'+p.brand+'</div>'
+        + '<h1 class="f-cormorant text-5xl sm:text-6xl text-zinc-100 font-700 leading-none mt-1">'+p.name+'</h1>'
+        + '<div class="mt-3 text-sm tracking-[0.1em] uppercase text-zinc-400">'+p.fam+' · '+p.gen+(agot?' · <span class="text-zinc-500">Agotado</span>':'')+'</div>'
+        + '<p class="mt-5 text-zinc-400 leading-relaxed max-w-md">Una fragancia <span class="text-zinc-200">'+(p.fam||'').toLowerCase()+'</span> '+genTxt+', de '+p.brand+'. Sus notas de '+p.notes.join(', ')+' crean una firma de alta concentración y larga duración.</p>'
+        + '<div class="mt-5 flex flex-wrap gap-2">'+p.notes.map(chip).join('')+'</div>'
+        + '<div class="mt-8 flex flex-wrap items-center gap-5">'
+          + '<div><div class="text-[11px] uppercase tracking-wide text-zinc-500">Precio</div><div class="f-cormorant font-700 text-4xl text-zinc-100">S/ '+p.price+'</div></div>'
+          + '<a href="'+wa(p)+'" target="_blank" rel="noopener" class="glow-hover inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-yellow-600 px-7 py-3.5 text-sm font-600 tracking-wide text-zinc-950"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.945C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.506 5.26l-.999 3.648 3.993-1.007z"/></svg>Pedir por WhatsApp</a>'
+        + '</div>'
       + '</div>'
-      + '<div class="mt-5 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm text-amber-200/90 flex items-center gap-2"><svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6 4.3 2.3 7.3L12 16.9 5.7 21l2.3-7.3-6-4.3h7.6z"/></svg><span><b>Ideal para:</b> '+pr.ideal+'</span></div>'
-      + '<p class="mt-3 text-[11px] text-zinc-600">* Perfil referencial según la familia olfativa.</p>'
-    + '</section>'
-    // ===== TAMBIÉN TE PUEDE GUSTAR =====
-    + '<section class="mt-14 border-t border-zinc-800/60 pt-10">'
-      + '<h2 class="f-cormorant text-3xl text-zinc-100 font-600 mb-6">También te puede gustar</h2>'
-      + '<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">'+related()+'</div>'
-    + '</section>';
+      + '</div>'
+      + '<section class="mt-14 border-t border-zinc-800/60 pt-10">'
+        + '<h2 class="f-cormorant text-3xl text-zinc-100 font-600">Perfil olfativo</h2>'
+        + '<p class="text-sm text-zinc-500 mb-7">para qué ocasión es ideal</p>'
+        + '<div class="grid sm:grid-cols-2 gap-4">'
+          + '<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6"><div class="text-[11px] uppercase tracking-[0.18em] text-zinc-500 mb-2">Duración</div><div class="f-cormorant text-xl text-zinc-100 mb-3">'+pr.longH+' h · '+(pr.longPct>=80?'Muy duradera':'Duradera')+'</div>'+bar(pr.longPct)+'</div>'
+          + '<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6"><div class="text-[11px] uppercase tracking-[0.18em] text-zinc-500 mb-2">Estela (proyección)</div><div class="f-cormorant text-xl text-zinc-100 mb-3">'+pr.sillTxt+'</div>'+bar(pr.sill)+'</div>'
+          + '<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6"><div class="text-[11px] uppercase tracking-[0.18em] text-zinc-500 mb-2">Momento del día</div><div class="f-cormorant text-xl text-zinc-100 mb-4">'+(pr.noche>=60?'Más de noche':pr.noche<=35?'Más de día':'Día y noche')+'</div><div class="relative h-2.5 rounded-full" style="background:linear-gradient(90deg,#E9C46A,#1a1333 55%,#4C5B9A)"><span class="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 ring-4 ring-amber-500/20" style="left:'+pr.noche+'%"></span></div><div class="mt-2 flex justify-between text-[11px] uppercase tracking-wide text-zinc-500"><span>Día</span><span>Noche</span></div></div>'
+          + '<div class="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6"><div class="text-[11px] uppercase tracking-[0.18em] text-zinc-500 mb-4">Estaciones</div><div class="grid grid-cols-4 gap-3">'+seasons(pr)+'</div></div>'
+        + '</div>'
+        + '<div class="mt-5 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-sm text-amber-200/90 flex items-center gap-2"><svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6 4.3 2.3 7.3L12 16.9 5.7 21l2.3-7.3-6-4.3h7.6z"/></svg><span><b>Ideal para:</b> '+pr.ideal+'</span></div>'
+        + '<p class="mt-3 text-[11px] text-zinc-600">* Perfil referencial según la familia olfativa.</p>'
+      + '</section>'
+      + '<section class="mt-14 border-t border-zinc-800/60 pt-10">'
+        + '<h2 class="f-cormorant text-3xl text-zinc-100 font-600 mb-6">También te puede gustar</h2>'
+        + '<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">'+related(p)+'</div>'
+      + '</section>';
+    if(window.VanillaTilt) VanillaTilt.init(document.querySelectorAll('[data-tilt]'));
+  }
+  function fromStatic(){ var i=parseInt(new URLSearchParams(location.search).get('i'),10); if(isNaN(i)||i<0||i>=D.length) i=0; var a=D[i]; draw({img:a[0],name:a[1],brand:a[2],fam:a[3],gen:a[4],price:a[5],notes:a[6].split(',').map(function(s){return s.trim();})}); }
 
-  if(window.VanillaTilt) VanillaTilt.init(document.querySelectorAll('[data-tilt]'));
+  var id = new URLSearchParams(location.search).get('id');
+  if(id && typeof firebase!=='undefined'){
+    try{
+      firebase.initializeApp({apiKey:"AIzaSyBD3RbrQUsYtFABqIs_5Pi97DpW034ukYY",authDomain:"elite-114bc.firebaseapp.com",projectId:"elite-114bc",storageBucket:"elite-114bc.firebasestorage.app",messagingSenderId:"544878346059",appId:"1:544878346059:web:42f399a5174087e5f272ce"});
+      firebase.firestore().collection('productos').doc(id).get().then(function(doc){
+        if(!doc.exists){ fromStatic(); return; }
+        var o=doc.data();
+        draw({img:o.img,name:o.nombre,brand:o.marca,fam:o.fam,gen:o.genero,price:o.precio,notes:o.notas||[],disponible:o.disponible});
+      }).catch(function(e){ console.log('Firestore:', e&&e.message); fromStatic(); });
+    }catch(e){ fromStatic(); }
+  } else { fromStatic(); }
 </script>

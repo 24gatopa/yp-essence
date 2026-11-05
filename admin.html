@@ -195,18 +195,23 @@
     if(!products.length){ $('list').innerHTML='<div class="text-center text-zinc-500 py-16 border border-dashed border-zinc-800 rounded-2xl">Catálogo vacío. Toca <b class="text-amber-400">Cargar los 29 iniciales</b> o <b class="text-amber-400">Añadir</b>.</div>'; return; }
     $('list').innerHTML = products.map(function(p){
       var thumb = p.img ? '<img src="'+p.img+'" class="w-full h-full object-contain">' : '<span class="text-zinc-600 text-[10px]">sin foto</span>';
-      var badge = p.disponible ? '<span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300">Disponible</span>' : '<span class="text-[11px] px-2 py-0.5 rounded-full bg-zinc-700/40 text-zinc-400">Agotado</span>';
-      var feat = p.destacado ? '<span class="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300">★ Destacado</span>' : '';
-      return '<div class="flex items-center gap-4 rounded-xl border border-zinc-800 bg-zinc-900/40 p-3">'
+      var availBtn = p.disponible
+        ? '<button onclick="toggleAvail(\''+p.id+'\')" title="Clic para marcar agotado" class="text-[11px] px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 transition">● Disponible</button>'
+        : '<button onclick="toggleAvail(\''+p.id+'\')" title="Clic para marcar disponible" class="text-[11px] px-2.5 py-1 rounded-full bg-zinc-700/40 text-zinc-400 hover:bg-zinc-700/60 transition">○ Agotado</button>';
+      var featBtn = '<button onclick="toggleFeat(\''+p.id+'\')" class="text-[11px] px-2.5 py-1 rounded-full transition '+(p.destacado?'bg-amber-500/15 text-amber-300 hover:bg-amber-500/25':'bg-zinc-800/60 text-zinc-500 hover:text-zinc-300')+'">★ Destacado</button>';
+      return '<div class="flex items-center gap-4 rounded-xl border border-zinc-800 bg-zinc-900/40 p-3'+(p.disponible?'':' opacity-60')+'">'
         +'<div class="w-14 h-16 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden shrink-0">'+thumb+'</div>'
         +'<div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap"><span class="f-cormorant text-xl text-zinc-100 font-600">'+esc(p.nombre)+'</span><span class="text-[11px] uppercase tracking-wide text-amber-400/70">'+esc(p.marca||'')+'</span></div>'
         +'<div class="text-xs text-zinc-500">'+esc(p.fam||'')+' · '+esc(p.genero)+'</div>'
-        +'<div class="flex gap-2 mt-1.5">'+badge+feat+'</div></div>'
-        +'<div class="text-right shrink-0"><div class="f-cormorant text-xl text-zinc-100 font-600">S/ '+p.precio+'</div>'
-        +'<div class="flex gap-2 mt-2"><button onclick="openForm(\''+p.id+'\')" class="text-xs px-3 py-1 rounded-full border border-zinc-700 text-zinc-300 hover:border-amber-400 hover:text-amber-300 transition">Editar</button>'
+        +'<div class="flex gap-2 mt-2 flex-wrap">'+availBtn+featBtn+'</div></div>'
+        +'<div class="text-right shrink-0"><button onclick="editPrice(\''+p.id+'\')" title="Clic para cambiar precio" class="f-cormorant text-xl text-zinc-100 font-600 hover:text-amber-300 transition">S/ '+p.precio+' <span class="text-xs text-zinc-500">✎</span></button>'
+        +'<div class="flex gap-2 mt-2"><button onclick="openForm(\''+p.id+'\')" class="text-xs px-3 py-1 rounded-full border border-zinc-700 text-zinc-300 hover:border-amber-400 hover:text-amber-300 transition">Editar todo</button>'
         +'<button onclick="del(\''+p.id+'\')" class="text-xs px-3 py-1 rounded-full border border-zinc-800 text-zinc-500 hover:border-red-500/50 hover:text-red-400 transition">Borrar</button></div></div></div>';
     }).join('');
   }
+  function toggleAvail(id){ var p=products.find(function(x){return x.id===id;}); if(p) db.collection(COL).doc(id).update({disponible:!p.disponible}).catch(function(e){alert('Error: '+e.message);}); }
+  function toggleFeat(id){ var p=products.find(function(x){return x.id===id;}); if(p) db.collection(COL).doc(id).update({destacado:!p.destacado}).catch(function(e){alert('Error: '+e.message);}); }
+  function editPrice(id){ var p=products.find(function(x){return x.id===id;}); if(!p) return; var np=prompt('Nuevo precio (S/) para '+p.nombre+':', p.precio); if(np===null) return; np=Number(np); if(isNaN(np)||np<=0){ alert('Pon un precio válido.'); return; } db.collection(COL).doc(id).update({precio:np}).catch(function(e){alert('Error: '+e.message);}); }
   function esc(s){ return String(s==null?'':s).replace(/[<>&"]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];}); }
 
   function openForm(id){

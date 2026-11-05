@@ -85,10 +85,14 @@
   function noteChip(n){ var c=NC[n]||'#a1a1aa'; return '<span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] text-zinc-300" style="border-color:'+c+'4d;background:'+c+'12"><span class="rounded-full" style="width:7px;height:7px;background:'+c+'"></span>'+n+'</span>'; }
   function card(p){
     var ver = p.ver ? '<a href="'+p.ver+'" target="_blank" rel="noopener" class="rounded-full border border-zinc-700 px-4 py-2 text-xs font-500 tracking-wide text-zinc-200 transition duration-300 hover:border-amber-400 hover:text-amber-300">Ver</a>' : '';
-    return '<article class="card group flex flex-col rounded-2xl border border-zinc-800 bg-zinc-900/40 p-5 transition duration-300 hover:-translate-y-1.5 hover:border-amber-500/40 hover:shadow-[0_24px_48px_-24px_rgba(0,0,0,0.85)]" data-gen="'+p.gen+'">'
+    var agot = (p.disponible===false);
+    var badges = (agot ? '<span class="absolute top-2 left-2 z-10 text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-zinc-900/90 text-zinc-300 border border-zinc-700">Agotado</span>' : '')
+      + (p.destacado ? '<span class="absolute top-2 right-2 z-10 text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">★ Top</span>' : '');
+    return '<article class="card group flex flex-col rounded-2xl border border-zinc-800 bg-zinc-900/40 p-5 transition duration-300 hover:-translate-y-1.5 hover:border-amber-500/40 hover:shadow-[0_24px_48px_-24px_rgba(0,0,0,0.85)]'+(agot?' opacity-60':'')+'" data-gen="'+p.gen+'">'
       +'<div class="relative h-56 flex items-center justify-center mb-4">'
+      + badges
       +'<div class="pointer-events-none absolute w-44 h-44 rounded-full" style="background:radial-gradient(circle,rgba(245,158,11,.15),transparent 66%);filter:blur(7px)"></div>'
-      +'<img src="'+p.img+'" alt="'+p.name+' de '+p.brand+'" loading="lazy" class="relative h-full object-contain transition duration-300 group-hover:scale-105 drop-shadow-[0_18px_28px_rgba(0,0,0,0.6)]">'
+      +'<img src="'+p.img+'" alt="'+p.name+' de '+p.brand+'" loading="lazy" class="relative h-full object-contain'+(agot?' grayscale':'')+' transition duration-300 group-hover:scale-105 drop-shadow-[0_18px_28px_rgba(0,0,0,0.6)]">'
       +'</div>'
       +'<div class="text-[11px] uppercase tracking-[0.2em] text-amber-400/80">'+p.brand+'</div>'
       +'<h3 class="f-cormorant text-2xl text-zinc-100 font-600 mt-0.5 leading-tight">'+p.name+'</h3>'
@@ -119,7 +123,7 @@
     firebase.initializeApp({apiKey:"AIzaSyBD3RbrQUsYtFABqIs_5Pi97DpW034ukYY",authDomain:"elite-114bc.firebaseapp.com",projectId:"elite-114bc",storageBucket:"elite-114bc.firebasestorage.app",messagingSenderId:"544878346059",appId:"1:544878346059:web:42f399a5174087e5f272ce"});
     firebase.firestore().collection('productos').orderBy('orden').get().then(function(snap){
       if(snap.empty) return;
-      var arr=snap.docs.map(function(d){var o=d.data(); return {img:o.img,name:o.nombre,brand:o.marca,fam:o.fam,gen:o.genero,price:o.precio,notes:o.notas||[],ver:(o.nombre==='9pm'?'9pm.html':undefined)};});
+      var arr=snap.docs.map(function(d){var o=d.data(); return {img:o.img,name:o.nombre,brand:o.marca,fam:o.fam,gen:o.genero,price:o.precio,notes:o.notas||[],disponible:o.disponible,destacado:o.destacado,ver:'perfume.html?id='+d.id};});
       renderGrid(arr);
     }).catch(function(e){ console.log('Firestore:', e && e.message); });
   } catch(e){ console.log(e); }
