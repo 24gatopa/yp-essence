@@ -168,7 +168,8 @@
     firebase.initializeApp({apiKey:"AIzaSyBD3RbrQUsYtFABqIs_5Pi97DpW034ukYY",authDomain:"elite-114bc.firebaseapp.com",projectId:"elite-114bc",storageBucket:"elite-114bc.firebasestorage.app",messagingSenderId:"544878346059",appId:"1:544878346059:web:42f399a5174087e5f272ce"});
     firebase.firestore().collection('productos').orderBy('orden').get().then(function(snap){
       if(snap.empty) return;
-      var arr=snap.docs.map(function(d){var o=d.data(); return {img:o.img,name:o.nombre,brand:o.marca,fam:o.fam,gen:o.genero,price:o.precio,notes:o.notas||[],disponible:o.disponible,destacado:o.destacado,ver:'perfume.html?id='+d.id};});
+      var arr=snap.docs.map(function(d){var o=d.data(); return {img:o.img,name:o.nombre,brand:o.marca,fam:o.fam,gen:o.genero,price:o.precio,notes:o.notas||[],disponible:o.disponible,destacado:o.destacado,orden:o.orden,ver:'perfume.html?id='+d.id};});
+      arr.sort(function(a,b){ return ((b.destacado===true)-(a.destacado===true)) || ((a.disponible===false)-(b.disponible===false)) || ((a.orden||0)-(b.orden||0)); });
       renderGrid(arr);
     }).catch(function(e){ console.log('Firestore:', e && e.message); });
   } catch(e){ console.log(e); }
