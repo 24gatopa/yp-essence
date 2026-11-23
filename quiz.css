@@ -1,0 +1,43 @@
+/* ÉLITÉ — Test de aroma (módulo de Claude; usa la identidad de identidad.css) */
+.navlinks .elite-quiz-open{cursor:pointer}
+.hero .actions .elite-quiz-open{cursor:pointer}
+
+.elite-quiz-modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:18px}
+.elite-quiz-modal.open{display:flex}
+.elite-quiz-modal .veil{position:absolute;inset:0;background:rgba(55,38,45,.42);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.elite-quiz-card{position:relative;width:100%;max-width:700px;max-height:90vh;overflow:auto;background:var(--paper,#faf6ef);color:var(--ink,#37262d);border:1px solid var(--hair,#ddd2c5);border-radius:8px;padding:clamp(26px,4vw,40px) clamp(20px,3.4vw,34px);box-shadow:0 40px 90px -30px rgba(55,38,45,.55);animation:eqpop .28s ease}
+@keyframes eqpop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.elite-quiz-x{position:absolute;top:12px;right:14px;border:0;background:none;font-size:26px;line-height:1;color:var(--muted,#71655f);cursor:pointer}
+.elite-quiz-x:hover{color:var(--wine,#613547)}
+
+.elite-quiz-eyebrow{font:600 11px var(--reading,system-ui);letter-spacing:.24em;text-transform:uppercase;color:var(--wine,#613547);text-align:center}
+.elite-quiz-bar{height:2px;background:var(--hair,#ddd2c5);margin:14px auto 26px;max-width:280px}
+.elite-quiz-bar span{display:block;height:100%;background:var(--wine,#613547);transition:width .4s ease}
+.elite-quiz-q{font-family:var(--display,Georgia,serif);font-weight:400;font-size:clamp(30px,4.6vw,46px);line-height:1.03;letter-spacing:-.035em;text-align:center;color:var(--ink,#37262d);margin:0 0 26px;text-wrap:balance}
+.elite-quiz-opts{display:grid;grid-template-columns:1fr;gap:12px;max-width:440px;margin:0 auto}
+@media(min-width:540px){.elite-quiz-opts{grid-template-columns:1fr 1fr}}
+.elite-quiz-opt{padding:16px 18px;border:1px solid var(--hair,#ddd2c5);border-radius:6px;background:#fffdf9;color:var(--ink,#37262d);font:400 15px var(--reading,system-ui);cursor:pointer;transition:border-color .2s,color .2s,transform .2s}
+.elite-quiz-opt:hover{border-color:var(--wine,#613547);color:var(--wine,#613547);transform:translateY(-1px)}
+.elite-quiz-back,.elite-quiz-restart{display:inline-block;margin:22px auto 0;border:0;background:none;color:var(--muted,#71655f);font:400 13px var(--reading,system-ui);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.elite-quiz-back{display:block}
+.elite-quiz-back:hover,.elite-quiz-restart:hover{color:var(--wine,#613547)}
+
+.elite-quiz-h{font-family:var(--display,Georgia,serif);font-weight:400;font-size:clamp(30px,4.6vw,48px);letter-spacing:-.035em;text-align:center;color:var(--ink,#37262d);margin:4px 0 4px}
+.elite-quiz-sub{text-align:center;color:var(--muted,#71655f);font:400 14px var(--reading,system-ui);margin:0 0 26px}
+.elite-quiz-results{display:grid;grid-template-columns:1fr;gap:24px;max-width:300px;margin:0 auto}
+@media(min-width:560px){.elite-quiz-results{grid-template-columns:1fr 1fr 1fr;max-width:none;gap:clamp(18px,2.6vw,34px)}}
+.eq-card{text-align:left}
+.eq-card .ph{aspect-ratio:1.18;display:flex;align-items:center;justify-content:center;background:transparent;overflow:hidden;margin-bottom:10px}
+.eq-card .ph img{width:100%;height:100%;object-fit:contain}
+.eq-card .bm{font:600 10px var(--reading,system-ui);letter-spacing:.16em;text-transform:uppercase;color:var(--muted,#71655f)}
+.eq-card h4{font-family:var(--display,Georgia,serif);font-weight:400;font-size:25px;margin:3px 0 5px;color:var(--ink,#37262d);line-height:1.05}
+.eq-card .sc{font:400 13px var(--reading,system-ui);color:var(--muted,#71655f);line-height:1.5;margin:0}
+.eq-card .pr{font-family:var(--display,Georgia,serif);font-size:18px;color:var(--wine,#613547);margin-top:7px}
+.eq-card .eq-links{display:flex;gap:12px;align-items:center;margin-top:9px;flex-wrap:wrap}
+.eq-buy{display:inline-block;background:var(--wine,#613547);color:#fff9ef;border-radius:4px;padding:9px 15px;font:600 12px var(--reading,system-ui);letter-spacing:.02em;text-decoration:none}
+.eq-buy:hover{filter:brightness(1.08)}
+.eq-see{color:var(--wine,#613547);font:400 13px var(--reading,system-ui);text-decoration:underline;text-underline-offset:3px}
+.elite-quiz-cta{text-align:center;margin-top:28px}
+.elite-quiz-cta .eq-buy{padding:13px 24px;font-size:13px}
+.elite-quiz-cta .elite-quiz-restart{margin-top:14px}
+@media(prefers-reduced-motion:reduce){.elite-quiz-card{animation:none}.elite-quiz-bar span{transition:none}}
