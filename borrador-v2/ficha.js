@@ -49,30 +49,25 @@ function iconoNota(nota) {
 function barra(n,tono='') {
   return '<span class="pista" aria-hidden="true" style="--valor:'+n+'%;'+(tono?'--tinta:'+tono:'')+'"><i></i></span>';
 }
-function nivelNota(p,nota){
-  const comparar=claveAroma(nota).trim();
-  const editorial=acentosElite[slugProducto(p)]?.notas || {};
-  for(const datos of [p.intensidades || {},editorial]){
-    const dato=Object.entries(datos).find(([key])=>claveAroma(key).trim()===comparar);
-    if(dato && Number.isInteger(dato[1]) && dato[1]>=1 && dato[1]<=5) return dato[1];
-  }
-  return null;
-}
 function fuenteEnlace(url,texto){
   return /^https:\/\//i.test(url || '')?'<a class="origen" target="_blank" rel="noopener" href="'+safe(url)+'">'+texto+'</a>':'';
 }
+// Solo las notas con presencia valorada; una nota sin nivel (pirámide propia
+// de la tienda o perfume sin valoración) se lista sin barra.
 function notasFicha(p) {
-  const grupos=gruposNotas(p);
+  const grupos=notasPresentes(p);
   const total=grupos.reduce((n,[,notas])=>n+notas.length,0);
   if(!total) return '';
+  const conNivel=grupos.some(([,notas])=>notas.some(n=>nivelNota(p,n)));
   const bloques=grupos.map(([titulo,notas])=>'<section class="fase"><h3>'+safe(titulo)+'</h3><ul>'+notas.map(n=>{
     const valor=nivelNota(p,n);
-    return '<li>'+icono(iconoNota(n))+'<div><span class="nombre-nota">'+safe(n)+'</span>'+(valor?'<small>'+nombresNivel[valor]+' · '+valor+'/5</small>'+barra(valor*20,colorNota(n)):'<small>Sin valorar</small>')+'</div></li>';
+    return '<li>'+icono(iconoNota(n))+'<div><span class="nombre-nota">'+safe(n)+'</span>'+(valor?'<small>'+nombresNivel[valor]+' · '+valor+'/5</small>'+barra(valor*20,colorNota(n)):'')+'</div></li>';
   }).join('')+'</ul></section>').join('');
   const fuente=p.notasPersonalizadas?'':fuenteEnlace(piramidesElite[slugProducto(p)]?.fuente,'Consultar notas de referencia');
   const fuenteAcento=acentosElite[slugProducto(p)]?.fuente;
   const acento=fuenteAcento===piramidesElite[slugProducto(p)]?.fuente && fuente?'':fuenteEnlace(fuenteAcento,'Referencia de presencia aromática');
-  return '<section class="panel-notas"><h2>Notas del perfume</h2><p class="leyenda">La barra indica cuánto destaca cada nota al olerla, de 1 a 5. La escala expresa una valoración editorial.</p>'+bloques+'<div class="fuentes">'+[fuente,acento].filter(Boolean).join(' ')+'</div></section>';
+  const leyenda=conNivel?'Las notas que más se perciben al olerlo. La barra indica cuánto destaca cada una, de 1 a 5, según una valoración editorial.':'Notas registradas de este perfume.';
+  return '<section class="panel-notas"><h2>Notas del perfume</h2><p class="leyenda">'+leyenda+'</p>'+bloques+'<div class="fuentes">'+[fuente,acento].filter(Boolean).join(' ')+'</div></section>';
 }
 function perfilFicha(pr) {
   const momento=pr.noche>=60?'Noche':pr.noche<=35?'Día':'Día y noche';
@@ -94,13 +89,14 @@ function draw(raw,disponibles=productosBase){
  main.innerHTML='<section class="showcase"><div class="portrait '+escenaPerfume(p)+'"><img fetchpriority="high" width="'+size.width+'" height="'+size.height+'" src="'+safe(p.img)+'" alt="'+safe(p.name)+'"></div><div class="intro">'+tituloPerfume(p)+'<div class="classify">'+[p.fam,p.gen,p.disponible===false?'Agotado':''].filter(Boolean).map(safe).join(' · ')+'</div><div class="purchase"><strong>S/ '+safe(p.price)+'</strong><a href="'+safe(link)+'" target="_blank" rel="noopener">'+(p.disponible===false?'Consultar reposición':'Pedir por WhatsApp')+'</a></div><details class="shipping"><summary>Entrega y formas de pago</summary><p>Envíos a todo el Perú. Confirma el costo y el plazo para tu distrito por WhatsApp. Yape y Plin disponibles. Contraentrega según cobertura.</p></details></div></section>'+
  '<div class="lectura-perfume"><div>'+notasFicha({...p,notes:raw.notes || []})+acorde9+'</div>'+perfilFicha(pr)+'</div>'+
  '<section class="section"><h2>También te puede gustar</h2><div class="recs">'+related.map(x=>'<a href="'+safe(x.ver)+'"><img width="'+tamanoFoto(x.img).width+'" height="'+tamanoFoto(x.img).height+'" src="'+safe(x.img)+'" alt="" loading="lazy"><span><small>'+safe(x.brand)+'</small>'+safe(x.name)+'<small>S/ '+safe(x.price)+'</small></span></a>').join('')+'</div></section>';
+ if(window.carritoElite&&p.disponible!==false){main.querySelector('.purchase').append(carritoElite.boton(p));carritoElite.refrescar();}
 }
 function fail(){main.innerHTML='<p>Esta ficha no está disponible.</p><a href="index.html#coleccion">Volver a la colección</a>'}
 async function start(){
   const query=new URLSearchParams(location.search),id=query.get('id'),slug=document.body.dataset.perfume;
   const cache=leerCatalogo();
   let previo;
-  try { previo=JSON.parse(sessionStorage.getItem('elite.ficha.v3')); } catch {}
+  try { previo=JSON.parse(sessionStorage.getItem('elite.ficha.v4')); } catch {}
   let p;
   if(id) p=(previo?.id===id && previo) || cache.find(x=>x.id===id);
   if(!p && slug) p=cache.find(x=>slugProducto(x)===slug) || productosBase.find(x=>slugProducto(x)===slug);
@@ -108,10 +104,8 @@ async function start(){
   if(p) draw(p,cache.length?cache:productosBase);
   if(!id && !slug) return p || fail();
   try {
-    const col=await baseTienda();
-    const nombres=slug==='le-male-elixir'?['Le Male Elixir','elixir','Elixir']:[p?.name || document.body.dataset.nombre];
-    const doc=id?await col.doc(id).get():(await col.where('nombre','in',nombres).get()).docs.find(d=>slugProducto(productoDocumento(d))===slug);
-    if(doc?.exists) draw(productoDocumento(doc),cache.length?cache:productosBase);
+    const doc=id?await cargarProducto(id):await buscarProducto(slug);
+    if(doc) draw(doc,leerCatalogo().length?leerCatalogo():productosBase);
     else if(id || !p) fail();
   } catch { if(!p) fail(); }
 }

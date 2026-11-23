@@ -112,3 +112,12 @@ dialog :focus-visible { outline-offset:1px; }
 #compareItems .cmp-order{display:grid;place-items:center;align-self:stretch;justify-self:stretch;padding:8px 5px;background:var(--wine);color:white;text-decoration:none;text-align:center;border-radius:5px;font:600 14px var(--reading)}
 #entregas>div>p{color:var(--muted);line-height:1.5;max-width:36ch}
 @media(max-width:620px){.scene[data-escena]:before{background:linear-gradient(90deg,#faf6ef 0%,#faf6efdb 51%,#faf6ef35 80%)}#compareItems .cmp-order{font-size:12px}}
+/* Portada con varios destacados */
+.hero-copy,.stage{transition:opacity .36s ease}
+.scene.cambiando .hero-copy,.scene.cambiando .stage{opacity:0}
+.hero-puntos{display:flex;gap:4px;margin:14px -7px 0}
+.hero-puntos[hidden]{display:none}
+.hero-puntos button{width:26px;height:26px;padding:0;border:0;background:transparent;cursor:pointer;display:grid;place-items:center}
+.hero-puntos button::before{content:"";width:10px;height:10px;border-radius:50%;border:1px solid var(--wine);box-sizing:border-box;transition:background .2s}
+.hero-puntos button:hover::before,.hero-puntos button[aria-current="true"]::before{background:var(--wine)}
+@media(prefers-reduced-motion:reduce){.hero-copy,.stage{transition:none}}

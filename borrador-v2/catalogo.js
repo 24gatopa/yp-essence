@@ -1,7 +1,7 @@
 const local=productosBase;
 const el=id=>document.getElementById(id);
 let catalog=local,gender='Todos';
-const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const normalize=value=>String(value||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 for(const label of ['Todos','Hombre','Mujer','Unisex']){
  const b=document.createElement('button');b.textContent=label;b.onclick=()=>{gender=label;render()};el('groups').append(b);
 }
@@ -15,6 +15,45 @@ function recordarFicha(p){
  recordarProducto(p);
  try{sessionStorage.setItem('elite-vuelta',JSON.stringify({key:productKey(p),gender,aroma,brand:el('brands').value,search:el('search').value,sort:el('sort').value,scroll:scrollY}));}catch{}
 }
+// ——— Portada: uno o varios destacados en rotación ———
+const escena=document.querySelector('.scene');
+let destacados=[],heroActual=0,heroTimer=null;
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function pintarHero(hero){
+ escena.dataset.escena=escenaPerfume(hero);el('discover').onclick=()=>recordarFicha(hero);
+ el('house').textContent=hero.brand;el('title').textContent=hero.name;
+ el('title').style.fontSize=hero.name.length>9?'clamp(36px,5.2vw,84px)':'';
+ el('notes').textContent=hero.notes.slice(0,4).join(' · ');
+ Object.assign(el('bottle'),tamanoFoto(hero.img));el('bottle').src=hero.img;el('bottle').alt=hero.name+' de '+hero.brand;el('discover').href=hero.ver;el('discover').textContent='Descubrir '+hero.name;
+ for(const [i,b] of [...el('heroPuntos').children].entries()) b.setAttribute('aria-current',String(i===heroActual));
+}
+function mostrarHero(indice,animar=true){
+ if(!destacados.length)return;
+ heroActual=(indice+destacados.length)%destacados.length;
+ const hero=destacados[heroActual];
+ if(!animar||reduceMotion){pintarHero(hero);return;}
+ escena.classList.add('cambiando');
+ setTimeout(()=>{pintarHero(hero);escena.classList.remove('cambiando')},360);
+}
+function programarHero(){
+ clearInterval(heroTimer);heroTimer=null;
+ if(destacados.length>1&&!reduceMotion&&!document.hidden&&!escena.matches(':hover,:focus-within')) heroTimer=setInterval(()=>mostrarHero(heroActual+1),6000);
+}
+if(!el('heroPuntos')){
+ const puntos=document.createElement('div');puntos.id='heroPuntos';puntos.className='hero-puntos';puntos.setAttribute('aria-label','Perfumes destacados');puntos.hidden=true;
+ document.querySelector('.hero-copy').append(puntos);
+}
+for(const evento of ['mouseenter','mouseleave','focusin','focusout']) escena.addEventListener(evento,programarHero);
+document.addEventListener('visibilitychange',programarHero);
+function configurarHero(arr){
+ destacados=arr.filter(p=>p.destacado&&p.disponible!==false);
+ if(!destacados.length){const unico=arr.find(p=>p.name==='9pm'&&p.disponible!==false)||arr.find(p=>p.disponible!==false);destacados=unico?[unico]:[]}
+ escena.hidden=!destacados.length;
+ const puntos=el('heroPuntos');puntos.replaceChildren();puntos.hidden=destacados.length<2;
+ destacados.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Ver '+p.name);b.onclick=()=>{mostrarHero(i);programarHero()};puntos.append(b)});
+ if(heroActual>=destacados.length)heroActual=0;
+ mostrarHero(heroActual,false);programarHero();
+}
 function update(arr){
  arr=arr.map(prepararProducto);
  catalog=arr;
@@ -22,15 +61,7 @@ function update(arr){
  el('brands').replaceChildren(new Option('Todas las marcas',''));
  for(const brand of [...new Set(arr.map(p=>p.brand).filter(Boolean))].sort()) el('brands').add(new Option(brand,brand));
  el('brands').value=chosen;if(el('brands').selectedIndex<0)el('brands').selectedIndex=0;
- const hero=arr.find(p=>p.destacado&&p.disponible!==false)||arr.find(p=>p.name==='9pm'&&p.disponible!==false)||arr.find(p=>p.disponible!==false);
- document.querySelector('.scene').hidden=!hero;
- if(hero){
- document.querySelector('.scene').dataset.escena=escenaPerfume(hero);el('discover').onclick=()=>recordarFicha(hero);
- el('house').textContent=hero.brand;el('title').textContent=hero.name;
- el('title').style.fontSize=hero.name.length>9?'clamp(36px,5.2vw,84px)':'';
- el('notes').textContent=hero.notes.slice(0,4).join(' · ');
- Object.assign(el('bottle'),tamanoFoto(hero.img));el('bottle').src=hero.img;el('bottle').alt=hero.name+' de '+hero.brand;el('discover').href=hero.ver;el('discover').textContent='Descubrir '+hero.name;
- }
+ configurarHero(arr);
  if(retorno){
    gender=retorno.gender;aroma=retorno.aroma;el('search').value=retorno.search;el('sort').value=retorno.sort;el('brands').value=retorno.brand;
  }
@@ -55,6 +86,9 @@ for(const [name,index] of aromaChoices){
 }
 el('aromaChip').onclick=()=>{aroma='';render()};
 for(const event of ['pointerdown','keydown','wheel']) window.addEventListener(event,()=>{retorno=null},{once:true,passive:true});
+function botonPedido(p){
+ return window.carritoElite&&p.disponible!==false?carritoElite.boton(p):null;
+}
 function syncCompare(){
  const selected=catalog.filter(p=>selection.includes(productKey(p)));
  el('chosen').textContent=selected.length+' de 3';el('compare').disabled=selected.length<2;
@@ -77,7 +111,7 @@ el('compare').onclick=()=>{
  const title=document.createElement('h3');title.textContent=p.name;
  const dl=document.createElement('dl');
  const pr=profile(p);
- for(const [label,value] of [['Familia',p.fam],['Notas',p.notes.join(' · ')],['Duración estimada','≈ '+pr.longH+' h'],['Uso sugerido',pr.noche>=60?'De noche':pr.noche<=35?'De día':'Día y noche'],['Existencias',p.disponible===false?'Agotado':'Consultar stock']]){
+ for(const [label,value] of [['Familia',p.fam],['Notas',p.notes.slice(0,6).join(' · ')],['Duración estimada','≈ '+pr.longH+' h'],['Uso sugerido',pr.noche>=60?'De noche':pr.noche<=35?'De día':'Día y noche'],['Existencias',p.disponible===false?'Agotado':'Consultar stock']]){
  const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;const row=document.createElement('div');row.append(dt,dd);
  if(label==='Duración estimada'||label==='Uso sugerido'){
    const line=document.createElement('div');line.setAttribute('aria-hidden','true');
@@ -91,8 +125,12 @@ el('compare').onclick=()=>{
  const order=document.createElement('a');order.href=pedidoWhatsApp(p);order.target='_blank';order.rel='noopener';order.className='cmp-order';
  order.textContent=p.disponible===false?'Consultar reposición':'Pedir por WhatsApp';
  order.setAttribute('aria-label',order.textContent+' · '+p.name);
- column.append(stage,brand,title,dl,price,order,link);container.append(column);
- }el('comparison').showModal();
+ column.append(stage,brand,title,dl,price,order);
+ const pedido=botonPedido(p);if(pedido)column.append(pedido);
+ column.append(link);container.append(column);
+ }
+ if(window.carritoElite)carritoElite.refrescar();
+ el('comparison').showModal();
 };
 el('closeCompare').onclick=()=>el('comparison').close();el('sort').onchange=render;
 
@@ -126,19 +164,21 @@ function render(){
  order.textContent=p.disponible===false?'Consultar reposición':'Pedir por WhatsApp';
  order.setAttribute('aria-label',order.textContent+' · '+p.name+' de '+p.brand);
  a.setAttribute('aria-label','Ver ficha de '+p.name+' de '+p.brand);
- const actions=document.createElement('div');actions.className='card-actions';actions.append(order,pick);
+ const actions=document.createElement('div');actions.className='card-actions';actions.append(order);
+ const pedido=botonPedido(p);if(pedido)actions.append(pedido);
+ actions.append(pick);
  entry.append(a,actions);fragment.append(entry);
  }
  el('grid').replaceChildren(fragment);syncCompare();el('count').textContent=visible.length+(visible.length===1?' perfume':' perfumes');el('empty').hidden=visible.length>0;
+ if(window.carritoElite)carritoElite.refrescar();
 }
 el('clear').onclick=el('reset').onclick=()=>{aroma='';el('sort').value='';gender='Todos';el('search').value='';el('brands').value='';render()};el('search').oninput=render;el('brands').onchange=render;
 const lead=['9AM Dive','Asad','Amber Oud Gold Edition'];
 const rank=p=>lead.includes(p.name)?lead.indexOf(p.name):3;
+// 1) Copia guardada en este navegador (instantánea). 2) Catálogo en vivo.
 const copia=leerCatalogo();
 update(copia.length?copia:[...local].sort((a,b)=>rank(a)-rank(b)));
-baseTienda().then(col=>col.orderBy('orden').get()).then(snapshot=>{
-  if(snapshot.empty)return;
-  const frescos=snapshot.docs.map(productoDocumento).sort((a,b)=>(Number(b.destacado===true)-Number(a.destacado===true)) || (Number(a.disponible===false)-Number(b.disponible===false)) || ((a.orden||0)-(b.orden||0)));
-  guardarCatalogo(frescos);
+cargarCatalogo().then(frescos=>{
+  if(!frescos.length)return;
   if(JSON.stringify(copia)!==JSON.stringify(frescos)) update(frescos);
 }).catch(()=>{});

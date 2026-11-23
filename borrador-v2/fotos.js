@@ -1,7 +1,7 @@
 const fotosColeccion = {
   "9am-dive": "img/9am-dive.webp?foto=8bfe9022b1",
   "9pm": "img/9pm.webp?foto=3e8915770e",
-  "acqua-di-gio": "img/acqua-di-gio.webp?foto=45ce119d5f",
+  "acqua-di-gio": "img/acqua-di-gio.webp?foto=dc3f80e671",
   "amber-oud-gold": "img/amber-oud-gold.webp?foto=f51ec29049",
   "asad-bourbon": "img/asad-bourbon.webp?foto=96de6b3169",
   "asad-elixir": "img/asad-elixir.webp?foto=3f7cd403d8",
@@ -62,15 +62,16 @@ const nombresColeccion = {
   "scandal le parfum": "scandal-le-parfum",
   "born in roma intense": "born-in-roma"
 };
+// La foto de la web manda cuando existe; la foto subida desde el panel se usa
+// para perfumes que aún no tienen foto en la colección.
 function fotoColeccion(producto) {
-  if (/^data:image\//i.test(producto.img || '')) return producto.img;
   const ruta = String(producto.img || '').split(/[?#]/)[0];
-  const archivo = ruta.split('/').pop().replace(/\.(png|webp|jpe?g)$/i, '');
+  const archivo = /^data:/i.test(ruta) ? '' : ruta.split('/').pop().replace(/\.(png|webp|jpe?g)$/i, '');
   const nombre = String(producto.name || '').trim().toLowerCase();
-  return fotosColeccion[archivo] || producto.img || fotosColeccion[nombresColeccion[nombre]];
+  return fotosColeccion[archivo] || fotosColeccion[nombresColeccion[nombre]] || producto.img;
 }
 
-const dimensionesFoto = {"img/9am-dive.webp?foto=8bfe9022b1": [223, 492], "img/9pm.webp?foto=3e8915770e": [223, 493], "img/acqua-di-gio.webp?foto=45ce119d5f": [279, 489], "img/amber-oud-gold.webp?foto=f51ec29049": [281, 488], "img/asad-bourbon.webp?foto=96de6b3169": [237, 486], "img/asad-elixir.webp?foto=3f7cd403d8": [232, 486], "img/asad.webp?foto=d3abe9acf4": [236, 490], "img/bade-sublime.webp?foto=ba284b8461": [298, 480], "img/born-in-roma.webp?foto=f77d07ad43": [303, 479], "img/fakhar.webp?foto=e558448636": [382, 319], "img/hawas-ice.webp?foto=daab3877bc": [296, 489], "img/hawas-malibu.webp?foto=dd06a43393": [292, 483], "img/honor-glory.webp?foto=6420b382d3": [282, 461], "img/khamrah-dukhan.webp?foto=51fe8dbd04": [339, 457], "img/khamrah-qahwa.webp?foto=5ced4ab45d": [340, 462], "img/khamrah.webp?foto=01b354a7be": [351, 452], "img/le-beau.webp?foto=010e26ab03": [232, 468], "img/le-male.webp?foto=39ed223b9b": [220, 470], "img/mandarinsky-elixir.webp?foto=cf1dddb935": [331, 457], "img/mandarinsky.webp?foto=9e0bbb27fa": [334, 457], "img/mayar.webp?foto=6fc5ca9a85": [212, 475], "img/most-wanted.webp?foto=2fb209a7fe": [267, 471], "img/odyssey-homme-white.webp?foto=9fe8b3a951": [323, 463], "img/odyssey-limoni.webp?foto=f9f778b880": [336, 461], "img/oud-for-glory.webp?foto=b48268bd32": [271, 484], "img/scandal-le-parfum.webp?foto=236427d8b9": [231, 496], "img/stronger-intensely.webp?foto=3871189c3b": [1261, 1247], "img/yara-candy.webp?foto=5017108116": [237, 481], "img/yara-moi.webp?foto=b0d442d9e5": [232, 481], "img/yara-tous.webp?foto=5631f7d139": [238, 480], "img/yara.webp?foto=3e2ad25978": [234, 482]};
+const dimensionesFoto = {"img/9am-dive.webp?foto=8bfe9022b1": [223, 492], "img/9pm.webp?foto=3e8915770e": [223, 493], "img/acqua-di-gio.webp?foto=dc3f80e671": [420, 489], "img/amber-oud-gold.webp?foto=f51ec29049": [281, 488], "img/asad-bourbon.webp?foto=96de6b3169": [237, 486], "img/asad-elixir.webp?foto=3f7cd403d8": [232, 486], "img/asad.webp?foto=d3abe9acf4": [236, 490], "img/bade-sublime.webp?foto=ba284b8461": [298, 480], "img/born-in-roma.webp?foto=f77d07ad43": [303, 479], "img/fakhar.webp?foto=e558448636": [382, 319], "img/hawas-ice.webp?foto=daab3877bc": [296, 489], "img/hawas-malibu.webp?foto=dd06a43393": [292, 483], "img/honor-glory.webp?foto=6420b382d3": [282, 461], "img/khamrah-dukhan.webp?foto=51fe8dbd04": [339, 457], "img/khamrah-qahwa.webp?foto=5ced4ab45d": [340, 462], "img/khamrah.webp?foto=01b354a7be": [351, 452], "img/le-beau.webp?foto=010e26ab03": [232, 468], "img/le-male.webp?foto=39ed223b9b": [220, 470], "img/mandarinsky-elixir.webp?foto=cf1dddb935": [331, 457], "img/mandarinsky.webp?foto=9e0bbb27fa": [334, 457], "img/mayar.webp?foto=6fc5ca9a85": [212, 475], "img/most-wanted.webp?foto=2fb209a7fe": [267, 471], "img/odyssey-homme-white.webp?foto=9fe8b3a951": [323, 463], "img/odyssey-limoni.webp?foto=f9f778b880": [336, 461], "img/oud-for-glory.webp?foto=b48268bd32": [271, 484], "img/scandal-le-parfum.webp?foto=236427d8b9": [231, 496], "img/stronger-intensely.webp?foto=3871189c3b": [1261, 1247], "img/yara-candy.webp?foto=5017108116": [237, 481], "img/yara-moi.webp?foto=b0d442d9e5": [232, 481], "img/yara-tous.webp?foto=5631f7d139": [238, 480], "img/yara.webp?foto=3e2ad25978": [234, 482]};
 
 function tamanoFoto(url) {
   const [width,height]=dimensionesFoto[url] || [375,500];

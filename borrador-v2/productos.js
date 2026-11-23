@@ -34,7 +34,7 @@ const productosBase=[
     "brand": "Lattafa",
     "fam": "Oriental gourmand",
     "gen": "Unisex",
-    "price": 129,
+    "price": 139,
     "notes": [
       "Canela",
       "Dátiles",
@@ -48,7 +48,7 @@ const productosBase=[
     "brand": "Lattafa",
     "fam": "Oriental café",
     "gen": "Unisex",
-    "price": 129,
+    "price": 139,
     "notes": [
       "Café",
       "Cardamomo",
@@ -90,7 +90,7 @@ const productosBase=[
     "brand": "Lattafa",
     "fam": "Amaderado especiado",
     "gen": "Hombre",
-    "price": 139,
+    "price": 149,
     "notes": [
       "Bourbon",
       "Canela",
@@ -174,7 +174,7 @@ const productosBase=[
     "brand": "Lattafa",
     "fam": "Amaderado oud",
     "gen": "Unisex",
-    "price": 129,
+    "price": 135,
     "notes": [
       "Oud",
       "Azafrán",
@@ -188,7 +188,7 @@ const productosBase=[
     "brand": "Lattafa",
     "fam": "Amaderado ambarado",
     "gen": "Unisex",
-    "price": 129,
+    "price": 135,
     "notes": [
       "Oud",
       "Ámbar",
@@ -202,7 +202,7 @@ const productosBase=[
     "brand": "Lattafa",
     "fam": "Oriental oud",
     "gen": "Unisex",
-    "price": 129,
+    "price": 135,
     "notes": [
       "Oud",
       "Rosa",
@@ -216,7 +216,7 @@ const productosBase=[
     "brand": "Armaf",
     "fam": "Cítrico ámbar",
     "gen": "Hombre",
-    "price": 125,
+    "price": 135,
     "notes": [
       "Mandarina",
       "Especias",
@@ -230,7 +230,7 @@ const productosBase=[
     "brand": "Armaf",
     "fam": "Cítrico ámbar intenso",
     "gen": "Hombre",
-    "price": 149,
+    "price": 165,
     "notes": [
       "Mandarina",
       "Canela",
@@ -244,7 +244,7 @@ const productosBase=[
     "brand": "Armaf",
     "fam": "Cítrico aromático",
     "gen": "Hombre",
-    "price": 129,
+    "price": 139,
     "notes": [
       "Limón",
       "Albahaca",
@@ -272,7 +272,7 @@ const productosBase=[
     "brand": "Rasasi",
     "fam": "Acuático fresco",
     "gen": "Hombre",
-    "price": 149,
+    "price": 159,
     "notes": [
       "Menta",
       "Cítricos",
@@ -286,7 +286,7 @@ const productosBase=[
     "brand": "Rasasi",
     "fam": "Acuático afrutado",
     "gen": "Hombre",
-    "price": 149,
+    "price": 159,
     "notes": [
       "Piña",
       "Coco",
@@ -328,13 +328,14 @@ const productosBase=[
     "brand": "Armani",
     "fam": "Oriental vainilla",
     "gen": "Hombre",
-    "price": 365,
+    "price": 379,
     "notes": [
       "Cardamomo",
       "Vainilla",
       "Ámbar"
     ],
-    "ver": "perfume.html?i=23"
+    "ver": "perfume.html?i=23",
+    "destacado": true
   },
   {
     "img": "img/acqua-di-gio.png",
