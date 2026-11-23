@@ -3,8 +3,8 @@
 (function(){
   const CLAVE='elite.carrito.v1', TELEFONO='51938430692';
   const sanear=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const iconoBolsa='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><path d="M9 13c.8 1.3 1.8 2 3 2s2.2-.7 3-2"/></svg>';
-  const iconoWa='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 1.8a8.2 8.2 0 1 1-4.2 15.3l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8zm-3.3 4.4c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.3s1 2.7 1.2 2.9c.1.2 2 3.1 4.9 4.3 2.4 1 2.9.8 3.4.7.5 0 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3l-2-1c-.3-.1-.5-.2-.7.2l-.9 1.2c-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5.3-.5v-.5l-.9-2.2c-.2-.5-.5-.5-.7-.5z"/></svg>';
+  const iconoBolsa='<i class="picto-pedido picto-bolsa" aria-hidden="true"></i>';
+  const iconoWa='<i class="picto-pedido picto-chat" aria-hidden="true"></i>';
   let items=leer();
   function leer(){ try{ const d=JSON.parse(localStorage.getItem(CLAVE)); return Array.isArray(d)?d.filter(i=>i&&i.key):[]; }catch{ return []; } }
   function guardar(){ try{ localStorage.setItem(CLAVE,JSON.stringify(items)); }catch{} }

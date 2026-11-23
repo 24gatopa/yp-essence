@@ -214,7 +214,21 @@
   #aroma-list { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
 
-.navlinks .contact::before{content:"";display:inline-block;width:1.1em;height:1.1em;vertical-align:-.18em;margin-inline-end:.32em;background:url(img/acciones.webp) 66.66666666666667% 0%/400% 400% no-repeat;mix-blend-mode:multiply;border-radius:3px}
-.delivery-nav::before{content:"";display:inline-block;width:1.1em;height:1.1em;vertical-align:-.18em;margin-inline-end:.32em;background:url(img/acciones.webp) 100% 0%/400% 400% no-repeat;mix-blend-mode:multiply;border-radius:3px}
-.pick::before{content:"";display:inline-block;width:1.1em;height:1.1em;vertical-align:-.18em;margin-inline-end:.32em;background:url(img/acciones.webp) 33.333333333333336% 0%/400% 400% no-repeat;mix-blend-mode:multiply;border-radius:3px}
-.navlinks a[href="#coleccion"]::before{content:"";display:inline-block;width:1.1em;height:1.1em;vertical-align:-.18em;margin-inline-end:.32em;background:url(img/acciones.webp) 33.333333333333336% 100%/400% 400% no-repeat;mix-blend-mode:multiply;border-radius:3px}
+/* Pictogramas de ÉLITÉ. El color sigue al texto del botón. */
+.navlinks .contact::before,
+.delivery-nav::before,
+.pick::before,
+.navlinks a[href="#coleccion"]::before {
+  content: "";
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin-inline-end: .32em;
+  vertical-align: -.18em;
+  background: currentColor;
+  -webkit-mask: var(--picto) center / contain no-repeat;
+  mask: var(--picto) center / contain no-repeat;
+}
+.navlinks .contact { --picto: url("img/pictogramas/chat.png"); }
+.delivery-nav { --picto: url("img/pictogramas/entregas.png"); }
+.pick, .navlinks a[href="#coleccion"] { --picto: url("img/pictogramas/coleccion.png"); }
