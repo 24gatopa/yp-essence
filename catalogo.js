@@ -22,7 +22,7 @@ const escena=document.querySelector('.scene');
 let destacados=[],heroActual=0,heroTimer=null;
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function pintarHero(hero){
- escena.style.setProperty("--portada",fondoEditorial(hero)); escena.dataset.escena=escenaPerfume(hero);el('discover').onclick=()=>recordarFicha(hero);
+ escena.dataset.escena=escenaPerfume(hero);el('discover').onclick=()=>recordarFicha(hero);
  el('house').textContent=hero.brand;el('title').textContent=hero.name;
  el('title').style.fontSize=hero.name.length>9?'clamp(36px,5.2vw,84px)':'';
  el('notes').textContent=hero.notes.slice(0,4).join(' · ');
@@ -180,7 +180,7 @@ const rank=p=>lead.includes(p.name)?lead.indexOf(p.name):3;
 // 1) Copia guardada en este navegador (instantánea). 2) Catálogo en vivo.
 const copia=leerCatalogo();
 update(copia.length?copia:[...local].sort((a,b)=>rank(a)-rank(b)));
-cargarCatalogo().then(frescos=>{
+cargarCatalogo(conFotos=>update(conFotos)).then(frescos=>{
   if(!frescos.length)return;
   if(JSON.stringify(copia)!==JSON.stringify(frescos)) update(frescos);
 }).catch(()=>{});

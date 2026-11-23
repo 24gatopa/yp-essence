@@ -14,9 +14,6 @@ body{background:#faf7f1}
 .purchase{border-top:1px solid #daccc1;padding-top:1rem}
 .olfactory{padding-block:1.5rem}
 
-/* Portada de la colección con escenario editorial */
-.scene{background:radial-gradient(ellipse at 77% 38%,#f5e6d7 0,#e6d1c0 44%,#f7efe4 85%)}
-.scene[data-escena]{background:linear-gradient(90deg,#faf7f1 8%,#faf7f1dd 36%,transparent 72%),var(--portada) center/cover}
 
 /* Tarjetas: la foto se funde con el escenario */
 .product .photo{background:transparent;border:0;box-shadow:none;isolation:isolate}
@@ -33,21 +30,12 @@ body{background:#faf7f1}
 #aroma-list button:nth-child(5) i{background:url(img/editorial/aromas-4.webp) center/cover!important}
 #aroma-list button:nth-child(6) i{background:url(img/editorial/aromas-5.webp) center/cover!important}
 
-/* Ficha: una sola imagen panorámica como fondo, sin recuadro detrás del texto */
-main .showcase{position:relative;isolation:isolate;background:var(--ambiente) center/cover no-repeat;padding:clamp(14px,2.5vw,36px);margin-block:24px;gap:clamp(14px,2vw,30px);border-radius:5px;overflow:hidden}
-.showcase .portrait.campana{position:relative;aspect-ratio:1;height:auto;min-height:0;max-height:none;background:none;border:0;overflow:hidden;border-radius:8px;box-shadow:none;outline:0}
+/* Ficha: el escenario va solo detrás del frasco; el texto queda como siempre */
+main .showcase{align-items:center;background:none;padding:0;margin-block:24px;gap:clamp(18px,3vw,48px)}
+.showcase .portrait.campana{position:relative;aspect-ratio:1;height:auto;min-height:0;max-height:none;border:0;overflow:hidden;border-radius:8px;box-shadow:0 10px 30px #2a16203a;outline:0;display:grid;place-items:center;align-self:center;background:var(--ambiente) center/cover no-repeat}
 .showcase .portrait.campana::before,.showcase .portrait.campana::after{display:none}
-.showcase .portrait.campana img{position:static;display:block;width:100%;height:auto;margin:0;transform:none;filter:none;object-fit:contain;aspect-ratio:1;-webkit-mask:none;mask:none}
-main .showcase .intro{background:transparent;border:0;box-shadow:none;padding:clamp(16px,2.4vw,32px);border-radius:0;color:#140a0f}
-main .showcase .intro :is(h1,.classify,strong,.brand,summary,p){color:#140a0f;text-shadow:none}
-main .showcase .intro h1{font-weight:700;letter-spacing:-.02em}
-main .showcase .intro .brand{font-weight:800;color:#2a1620}
-main .showcase .intro .classify,main .showcase .intro .shipping summary,main .showcase .intro .shipping p{font-weight:600;color:#140a0f}
-main .showcase .intro .purchase strong{font-weight:800}
-main .showcase .intro .brand{font-weight:700}
-main .showcase .intro .purchase{border-top-color:#2917232e}
-main .showcase .intro .shipping{border-top-color:#2917232e}
-main .showcase .intro .shipping summary::before{display:none}
+.showcase .portrait.campana img{position:static;display:block;width:86%;height:86%;max-width:100%;max-height:100%;margin:auto;transform:none;filter:drop-shadow(0 14px 18px #1a0c1038);object-fit:contain;object-position:center;aspect-ratio:auto;-webkit-mask:none;mask:none}
+.showcase .intro{align-self:center}
 .soporte-marca{background:transparent}
 
 /* Barra de pedido al bajar en la ficha */
@@ -63,10 +51,8 @@ body:has(.pedido-al-bajar:not([hidden])) footer{padding-bottom:6rem}
   .product .scent{font-size:.82rem}
 }
 @media(max-width:740px){
-  main .showcase{grid-template-columns:1fr;background-size:cover;padding:10px}
-  .showcase .intro{padding:.6rem}
+  main .showcase{grid-template-columns:1fr}
 }
 /* Título: nunca cortar palabras; el logo de marca cede espacio en pantallas estrechas */
 main .showcase .intro h1{overflow-wrap:normal;word-break:normal;hyphens:manual;text-wrap:balance}
-main .showcase .titulo-perfume{flex-wrap:wrap;align-items:flex-start}
 @media(max-width:520px){main .showcase .soporte-marca{display:none}}

@@ -6,7 +6,7 @@ function montarVistas(p) {
  const original=foto.src;
  foto.onerror=()=>{foto.onerror=null;foto.src=original;};
  portada.classList.add('campana');
- foto.src='v/'+encodeURIComponent(slug)+'-0.webp?v=panorama4';
+ if(!/^data:/.test(p.img||'')) foto.src='v/'+encodeURIComponent(slug)+'-0.webp?v=29';
  foto.alt=p.name+' de '+p.brand;
  observadorPedido?.disconnect();document.querySelector('.pedido-al-bajar')?.remove();
  const compra=main.querySelector('.purchase'),barra=document.createElement('aside');barra.className='pedido-al-bajar';barra.hidden=true;barra.append(compra.querySelector('strong').cloneNode(true),compra.querySelector('a').cloneNode(true));document.body.append(barra);

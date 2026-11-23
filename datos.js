@@ -98,37 +98,49 @@ async function pedirJSON(url) {
   if(!r.ok) throw new Error('Firestore '+r.status);
   return r.json();
 }
-// Un producto necesita su foto de Firestore solo si no tiene foto en la web.
-function necesitaFoto(p) {
-  return !fotosColeccion[slugProducto(p)] && !fotosColeccion[nombresColeccion[String(p.name || '').trim().toLowerCase()]];
+// Fotos subidas desde el panel: se piden aparte (son pesadas) después de
+// pintar la lista, y mandan sobre la foto de la web.
+async function fotosDelPanel() {
+  const fotos=new Map(); let token='';
+  do {
+    const pagina=await pedirJSON(RUTA_CATALOGO+'?pageSize=300&mask.fieldPaths=img'+(token?'&pageToken='+encodeURIComponent(token):''));
+    for (const doc of pagina.documents || []) {
+      const img=valorFirestore(doc.fields?.img);
+      if (typeof img==='string' && /^data:image\//i.test(img)) fotos.set(String(doc.name).split('/').pop(), img);
+    }
+    token=pagina.nextPageToken || '';
+  } while(token);
+  return fotos;
 }
-async function completarFotos(productos) {
-  await Promise.all(productos.filter(necesitaFoto).map(async p=>{
-    try { const doc=await pedirJSON(RUTA_CATALOGO+'/'+encodeURIComponent(p.id)+'?mask.fieldPaths=img'); p.img=valorFirestore(doc.fields?.img) || ''; } catch {}
-  }));
-  return productos;
+function aplicarFotos(productos,fotos) {
+  let cambios=0;
+  for (const p of productos) { const img=fotos.get(p.id); if (img && p.img!==img) { p.img=img; cambios++; } }
+  return cambios;
 }
-// Lista ligera (sin fotos incrustadas) y luego solo las fotos que falten.
-async function cargarCatalogo() {
+// Lista ligera primero (rápida). Si se pasa `conFotos`, se llama después con
+// la lista ya con las fotos del panel cuando alguna cambió.
+async function cargarCatalogo(conFotos) {
   let docs=[],token='';
   do {
     const pagina=await pedirJSON(RUTA_CATALOGO+'?pageSize=300&'+MASCARA_LIGERA+(token?'&pageToken='+encodeURIComponent(token):''));
     docs=docs.concat(pagina.documents || []); token=pagina.nextPageToken || '';
   } while(token);
   const productos=docs.map(productoDocumento).sort((a,b)=>(Number(b.destacado===true)-Number(a.destacado===true)) || (Number(a.disponible===false)-Number(b.disponible===false)) || ((a.orden||0)-(b.orden||0)));
-  await completarFotos(productos);
+  const previas=new Map(leerCatalogo().filter(p=>/^data:/.test(p.img||'')).map(p=>[p.id,p.img]));
+  aplicarFotos(productos,previas);
   guardarCatalogo(productos);
+  const fotos=fotosDelPanel().then(f=>{ if(aplicarFotos(productos,f) || [...previas.keys()].some(id=>!f.has(id))) { for(const p of productos) if(!f.has(p.id) && /^data:/.test(p.img||'')) p.img=''; guardarCatalogo(productos); if(conFotos) conFotos(productos); } }).catch(()=>{});
+  if (!conFotos) await fotos;
   return productos;
 }
 async function cargarProducto(id) {
-  const doc=await pedirJSON(RUTA_CATALOGO+'/'+encodeURIComponent(id)+'?'+MASCARA_LIGERA);
-  if(!doc.fields) return null;
-  const [p]=await completarFotos([productoDocumento(doc)]);
-  return p;
+  const doc=await pedirJSON(RUTA_CATALOGO+'/'+encodeURIComponent(id));
+  return doc.fields?productoDocumento(doc):null;
 }
 async function buscarProducto(slug) {
-  const productos=await cargarCatalogo();
-  return productos.find(p=>slugProducto(p)===slug) || null;
+  const productos=await cargarCatalogo(()=>{});
+  const p=productos.find(p=>slugProducto(p)===slug);
+  return p?cargarProducto(p.id):null;
 }
 // Copia local del catálogo: la página pinta al instante y se actualiza después.
 const cacheCatalogo='elite.catalogo.v4';
