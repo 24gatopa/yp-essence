@@ -1,11 +1,8 @@
-# ÉLITÉ · yp-essence
+# ÉLITÉ · eliteperfumes.xyz
 
-Sitio público de ÉLITÉ servido con GitHub Pages desde la rama `main`.
+Tienda de ÉLITÉ servida con GitHub Pages en https://eliteperfumes.xyz (DNS en Cloudflare).
 
-- `borrador-v2/` — la tienda completa (colección, fichas, imágenes, tarjetas para compartir).
-- `index.html`, `9pm.html`, `perfume.html` — redirecciones de la raíz hacia `borrador-v2/` para que los enlaces antiguos sigan funcionando.
-- `.nojekyll` — evita que GitHub procese el sitio con Jekyll.
-
-Portada: https://24gatopa.github.io/yp-essence/borrador-v2/
-
-El panel de administración no vive en este repositorio: es privado y se abre desde la carpeta local `panel-privado`.
+- Raíz: la tienda (colección, fichas en `fichas/`, imágenes en `img/` y `v/`, tarjetas para compartir en `social/`).
+- `panel/`: administración del catálogo. Solo entra el dueño con su cuenta.
+- `borrador-v2/` y `404.html`: redirigen los enlaces antiguos (`/borrador-v2/…`) a la raíz.
+- `CNAME`: dominio personalizado. `.nojekyll`: GitHub sirve los archivos tal cual.
