@@ -38,10 +38,13 @@ main .showcase{position:relative;isolation:isolate;background:var(--ambiente) ce
 .showcase .portrait.campana{position:relative;aspect-ratio:1;height:auto;min-height:0;max-height:none;background:none;border:0;overflow:hidden;border-radius:8px;box-shadow:none;outline:0}
 .showcase .portrait.campana::before,.showcase .portrait.campana::after{display:none}
 .showcase .portrait.campana img{position:static;display:block;width:100%;height:auto;margin:0;transform:none;filter:none;object-fit:contain;aspect-ratio:1;-webkit-mask:none;mask:none}
-main .showcase .intro{background:transparent;border:0;box-shadow:none;padding:clamp(16px,2.4vw,32px);border-radius:0;color:#291723}
-main .showcase .intro :is(h1,.classify,strong,.brand,summary,p){color:#291723;text-shadow:none}
+main .showcase .intro{background:transparent;border:0;box-shadow:none;padding:clamp(16px,2.4vw,32px);border-radius:0;color:#140a0f}
+main .showcase .intro :is(h1,.classify,strong,.brand,summary,p){color:#140a0f;text-shadow:none}
+main .showcase .intro h1{font-weight:700;letter-spacing:-.02em}
+main .showcase .intro .brand{font-weight:800;color:#2a1620}
+main .showcase .intro .classify,main .showcase .intro .shipping summary,main .showcase .intro .shipping p{font-weight:600;color:#140a0f}
+main .showcase .intro .purchase strong{font-weight:800}
 main .showcase .intro .brand{font-weight:700}
-main .showcase .intro .shipping p{color:#3a2a31}
 main .showcase .intro .purchase{border-top-color:#2917232e}
 main .showcase .intro .shipping{border-top-color:#2917232e}
 main .showcase .intro .shipping summary::before{display:none}
