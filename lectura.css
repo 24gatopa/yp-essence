@@ -1,0 +1,43 @@
+/* Perfume detail */
+.lectura-perfume {display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.8fr);align-items:start;gap:clamp(32px,6vw,92px);border-block-start:1px solid var(--hair);padding-block:clamp(24px,4vw,52px);color:var(--ink)}
+.lectura-perfume h2 {font:400 clamp(29px,3.2vw,46px)/1.08 Georgia,serif;letter-spacing:-.035em;margin:0 0 10px}
+.lectura-perfume h3 {font:600 14px/1.3 var(--reading);color:var(--wine);letter-spacing:.05em;margin:22px 0 8px}
+.lectura-perfume .leyenda {font:400 14px/1.5 var(--reading);color:#695b61;margin:0 0 16px}
+.fase ul,.metricas,.acordes-extra ul {list-style:none;margin:0;padding:0}
+.fase ul {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
+.fase li,.metricas li {display:grid;grid-template-columns:36px minmax(0,1fr);gap:9px;align-items:center;padding:10px 0;border-top:1px solid #dfd3c6;min-width:0}
+.grabado {width:36px;height:36px;display:inline-block;background:url(img/iconos-elite.webp) var(--x) var(--y)/400% 400% no-repeat;mix-blend-mode:multiply}
+.fase li>div,.metricas li>div {min-width:0}
+.nombre-nota,.medida {font:600 15px/1.35 var(--reading);overflow-wrap:anywhere}
+.fase small {display:block;font:400 12px/1.4 var(--reading);color:#706369}
+.pista {display:block;background:#e5dcd1;border-radius:99px;height:6px;overflow:hidden;margin-top:6px}
+.pista i {display:block;width:var(--valor);height:100%;border-radius:inherit;background:var(--tinta,#794354);box-shadow:inset 0 0 0 1px #48253635}
+.panel-perfil {padding:clamp(18px,3vw,34px);background:#f2eade;border:1px solid #dfd3c6;border-radius:4px}
+.medida {display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.medida span {font-weight:400;font-size:14px;color:#684353;text-align:right}
+.panel-perfil h3 {margin:23px 0 8px}
+.estaciones .pista {height:5px;--tinta:#98744e}
+.fuentes {display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:16px}
+.origen {font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.acordes-extra {margin-top:20px;border-block-start:1px solid var(--hair);padding-top:14px}
+.acordes-extra summary {font-weight:600;cursor:pointer}
+.acordes-extra .leyenda {margin:8px 0}
+.acordes-extra li {display:grid;grid-template-columns:minmax(100px,1fr) 2fr;gap:12px;align-items:center;margin:5px 0;font-size:14px}
+.showcase .intro .shipping {margin-top:16px}
+@media(max-width:740px) {
+  #main.shell {width:min(100% - 32px,690px)}
+  .lectura-perfume {grid-template-columns:minmax(0,1fr);gap:24px;padding-block:23px}
+  .showcase .portrait {aspect-ratio:1.7;min-height:0}
+  .showcase .intro {padding:12px 0 4px}
+  .intro .purchase {gap:12px}
+  .intro .purchase a {min-height:46px}
+  .fase ul {gap:0 14px}
+  .fase li {grid-template-columns:30px minmax(0,1fr);gap:6px}
+  .fase .grabado {width:30px;height:30px}
+  .panel-perfil {padding:18px}
+  .medida {flex-wrap:wrap;gap:2px 10px}
+  .back {font-size:14px;display:inline-flex;align-items:center;min-height:44px}
+}
+@media(max-width:360px){.fase ul{grid-template-columns:1fr}.fase li{padding:8px 0}.intro .purchase a{width:100%}}
+
+.shipping summary::before{content:"";display:inline-block;width:1.1em;height:1.1em;vertical-align:-.18em;margin-inline-end:.32em;background:url(img/acciones.webp) 100% 0%/400% 400% no-repeat;mix-blend-mode:multiply;border-radius:3px}

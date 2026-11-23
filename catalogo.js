@@ -1,4 +1,4 @@
-const local=[{"img":"img/9pm.png","name":"9pm","brand":"Afnan","fam":"Oriental dulce","gen":"Hombre","price":139,"notes":["Manzana","Canela","Vainilla"],"ver":"perfume.html?i=0"},{"img":"img/9am-dive.png","name":"9AM Dive","brand":"Afnan","fam":"Acuático fresco","gen":"Hombre","price":149,"notes":["Marino","Cítricos","Ámbar"],"ver":"perfume.html?i=1"},{"img":"img/khamrah.png","name":"Khamrah","brand":"Lattafa","fam":"Oriental gourmand","gen":"Unisex","price":129,"notes":["Canela","Dátiles","Vainilla"],"ver":"perfume.html?i=2"},{"img":"img/khamrah-qahwa.png","name":"Khamrah Qahwa","brand":"Lattafa","fam":"Oriental café","gen":"Unisex","price":129,"notes":["Café","Cardamomo","Caramelo"],"ver":"perfume.html?i=3"},{"img":"img/khamrah-dukhan.png","name":"Khamrah Dukhan","brand":"Lattafa","fam":"Oriental ahumado","gen":"Unisex","price":139,"notes":["Incienso","Canela","Café"],"ver":"perfume.html?i=4"},{"img":"img/asad.png","name":"Asad","brand":"Lattafa","fam":"Amaderado afrutado","gen":"Hombre","price":125,"notes":["Piña","Bergamota","Ámbar gris"],"ver":"perfume.html?i=5"},{"img":"img/asad-bourbon.png","name":"Asad Bourbon","brand":"Lattafa","fam":"Amaderado especiado","gen":"Hombre","price":139,"notes":["Bourbon","Canela","Vainilla"],"ver":"perfume.html?i=6"},{"img":"img/asad-elixir.png","name":"Asad Elixir","brand":"Lattafa","fam":"Amaderado dulce","gen":"Hombre","price":149,"notes":["Piña","Ron","Vainilla"],"ver":"perfume.html?i=7"},{"img":"img/yara.png","name":"Yara","brand":"Lattafa","fam":"Floral dulce","gen":"Mujer","price":129,"notes":["Orquídea","Heliotropo","Sándalo"],"ver":"perfume.html?i=8"},{"img":"img/yara-candy.png","name":"Yara Candy","brand":"Lattafa","fam":"Gourmand dulce","gen":"Mujer","price":129,"notes":["Frutas","Caramelo","Vainilla"],"ver":"perfume.html?i=9"},{"img":"img/yara-moi.png","name":"Yara Moi","brand":"Lattafa","fam":"Floral frutal","gen":"Mujer","price":129,"notes":["Frambuesa","Jazmín","Vainilla"],"ver":"perfume.html?i=10"},{"img":"img/yara-tous.png","name":"Yara Tous","brand":"Lattafa","fam":"Floral frutal","gen":"Mujer","price":129,"notes":["Frutas","Flores","Almizcle"],"ver":"perfume.html?i=11"},{"img":"img/oud-for-glory.png","name":"Oud for Glory","brand":"Lattafa","fam":"Amaderado oud","gen":"Unisex","price":129,"notes":["Oud","Azafrán","Pachulí"],"ver":"perfume.html?i=12"},{"img":"img/honor-glory.png","name":"Honor & Glory","brand":"Lattafa","fam":"Amaderado ambarado","gen":"Unisex","price":129,"notes":["Oud","Ámbar","Especias"],"ver":"perfume.html?i=13"},{"img":"img/bade-sublime.png","name":"Bade'e Al Oud Sublime","brand":"Lattafa","fam":"Oriental oud","gen":"Unisex","price":129,"notes":["Oud","Rosa","Azafrán"],"ver":"perfume.html?i=14"},{"img":"img/mandarinsky.png","name":"Mandarin Sky","brand":"Armaf","fam":"Cítrico ámbar","gen":"Hombre","price":125,"notes":["Mandarina","Especias","Ámbar"],"ver":"perfume.html?i=15"},{"img":"img/mandarinsky-elixir.png","name":"Mandarin Sky Elixir","brand":"Armaf","fam":"Cítrico ámbar intenso","gen":"Hombre","price":149,"notes":["Mandarina","Canela","Ámbar"],"ver":"perfume.html?i=16"},{"img":"img/odyssey-limoni.png","name":"Odyssey Limoni","brand":"Armaf","fam":"Cítrico aromático","gen":"Hombre","price":129,"notes":["Limón","Albahaca","Almizcle"],"ver":"perfume.html?i=17"},{"img":"img/odyssey-homme-white.png","name":"Odyssey Homme White","brand":"Armaf","fam":"Amaderado fresco","gen":"Hombre","price":135,"notes":["Bergamota","Lavanda","Cedro"],"ver":"perfume.html?i=18"},{"img":"img/hawas-ice.png","name":"Hawas Ice","brand":"Rasasi","fam":"Acuático fresco","gen":"Hombre","price":149,"notes":["Menta","Cítricos","Ámbar gris"],"ver":"perfume.html?i=19"},{"img":"img/hawas-malibu.png","name":"Hawas Malibu","brand":"Rasasi","fam":"Acuático afrutado","gen":"Hombre","price":149,"notes":["Piña","Coco","Ámbar"],"ver":"perfume.html?i=20"},{"img":"img/amber-oud-gold.png","name":"Amber Oud Gold Edition","brand":"Al Haramain","fam":"Ambarado afrutado","gen":"Unisex","price":239,"notes":["Frutas","Ámbar","Almizcle"],"ver":"perfume.html?i=21"},{"img":"img/most-wanted.png","name":"The Most Wanted","brand":"Azzaro","fam":"Amaderado especiado","gen":"Hombre","price":299,"notes":["Cardamomo","Bourbon","Madera"],"ver":"perfume.html?i=22"},{"img":"img/stronger-intensely.png","name":"Stronger With You Intensely","brand":"Armani","fam":"Oriental vainilla","gen":"Hombre","price":365,"notes":["Cardamomo","Vainilla","Ámbar"],"ver":"perfume.html?i=23"},{"img":"img/acqua-di-gio.png","name":"Acqua di Gio","brand":"Giorgio Armani","fam":"Acuático cítrico","gen":"Hombre","price":449,"notes":["Marino","Bergamota","Pachulí"],"ver":"perfume.html?i=24"},{"img":"img/le-male.png","name":"Le Male","brand":"Jean Paul Gaultier","fam":"Aromático fougère","gen":"Hombre","price":479,"notes":["Lavanda","Menta","Vainilla"],"ver":"perfume.html?i=25"},{"img":"img/le-beau.png","name":"Le Beau","brand":"Jean Paul Gaultier","fam":"Amaderado coco","gen":"Hombre","price":479,"notes":["Coco","Bergamota","Haba tonka"],"ver":"perfume.html?i=26"},{"img":"img/scandal-le-parfum.png","name":"Scandal Le Parfum","brand":"Jean Paul Gaultier","fam":"Oriental gourmand","gen":"Mujer","price":399,"notes":["Miel","Caramelo","Haba tonka"],"ver":"perfume.html?i=27"},{"img":"img/born-in-roma.png","name":"Born in Roma Intense","brand":"Valentino","fam":"Amaderado aromático","gen":"Hombre","price":479,"notes":["Salvia","Vetiver","Vainilla"],"ver":"perfume.html?i=28"}];
+const local=productosBase;
 const el=id=>document.getElementById(id);
 let catalog=local,gender='Todos';
 const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -12,10 +12,11 @@ try {
  }
 } catch {}
 function recordarFicha(p){
+ recordarProducto(p);
  try{sessionStorage.setItem('elite-vuelta',JSON.stringify({key:productKey(p),gender,aroma,brand:el('brands').value,search:el('search').value,sort:el('sort').value,scroll:scrollY}));}catch{}
 }
 function update(arr){
- arr=arr.map(productoTienda);
+ arr=arr.map(prepararProducto);
  catalog=arr;
  const chosen=el('brands').value;
  el('brands').replaceChildren(new Option('Todas las marcas',''));
@@ -27,7 +28,7 @@ function update(arr){
  document.querySelector('.scene').dataset.escena=escenaPerfume(hero);el('discover').onclick=()=>recordarFicha(hero);
  el('house').textContent=hero.brand;el('title').textContent=hero.name;
  el('title').style.fontSize=hero.name.length>9?'clamp(36px,5.2vw,84px)':'';
- el('notes').textContent=hero.name==='9pm'&&hero.notes.join(',')==='Manzana,Canela,Vainilla'?'Manzana, canela y vainilla.':hero.notes.join(' · ');
+ el('notes').textContent=hero.notes.slice(0,4).join(' · ');
  Object.assign(el('bottle'),tamanoFoto(hero.img));el('bottle').src=hero.img;el('bottle').alt=hero.name+' de '+hero.brand;el('discover').href=hero.ver;el('discover').textContent='Descubrir '+hero.name;
  }
  if(retorno){
@@ -112,12 +113,12 @@ function render(){
  el('aromaChip').hidden=!aroma;el('aromaChip').textContent=aroma+' ×';el('aromaChip').setAttribute('aria-label','Quitar filtro '+aroma);
  el('clear').hidden=!(aroma||brand||q||gender!=='Todos'||el('sort').value);
  for(const b of el('groups').children)b.setAttribute('aria-pressed',String(b.textContent===gender));
- el('grid').replaceChildren();
+ const fragment=document.createDocumentFragment();
  for(const p of visible){
  const a=document.createElement('a');a.href=p.ver;a.className='product';a.onclick=()=>recordarFicha(p);
  a.innerHTML='<div class="photo"><img alt="" loading="lazy"></div><div class="meta"><span></span><span></span></div><h3></h3><p class="scent"></p><div class="product-foot"><span></span><b></b></div>';
- Object.assign(a.querySelector('img'),tamanoFoto(p.img));a.querySelector('img').src=p.img;a.querySelector('.meta span').textContent=p.brand;a.querySelector('.meta span:last-child').textContent=p.disponible===false?'Agotado':p.destacado?'Destacado':'';
- a.querySelector('h3').textContent=p.name; a.querySelector('.scent').textContent=(p.notes||[]).join(' · ');a.querySelector('.product-foot span').textContent=p.fam;a.querySelector('b').textContent='S/ '+p.price; const entry=document.createElement('article');entry.className='entry';
+ Object.assign(a.querySelector('img'),tamanoFoto(p.img));a.querySelector('img').src=miniaturaElite(p.img);a.querySelector('img').decoding='async';a.querySelector('.meta span').textContent=p.brand;a.querySelector('.meta span:last-child').textContent=p.disponible===false?'Agotado':p.destacado?'Destacado':'';
+ a.querySelector('h3').textContent=p.name; a.querySelector('.scent').textContent=p.notes.slice(0,3).join(' · ');a.querySelector('.product-foot span').textContent=p.fam;a.querySelector('b').textContent='S/ '+p.price; const entry=document.createElement('article');entry.className='entry';
  const pick=document.createElement('button');pick.className='pick';pick.dataset.key=productKey(p);pick.setAttribute('aria-label','Comparar '+p.name);
  pick.onclick=()=>{const key=productKey(p);selection=selection.includes(key)?selection.filter(x=>x!==key):[...selection,key];syncCompare()};
  const order=document.createElement('a');
@@ -126,12 +127,18 @@ function render(){
  order.setAttribute('aria-label',order.textContent+' · '+p.name+' de '+p.brand);
  a.setAttribute('aria-label','Ver ficha de '+p.name+' de '+p.brand);
  const actions=document.createElement('div');actions.className='card-actions';actions.append(order,pick);
- entry.append(a,actions);el('grid').append(entry);
+ entry.append(a,actions);fragment.append(entry);
  }
- syncCompare();el('count').textContent=visible.length+(visible.length===1?' perfume':' perfumes');el('empty').hidden=visible.length>0;
+ el('grid').replaceChildren(fragment);syncCompare();el('count').textContent=visible.length+(visible.length===1?' perfume':' perfumes');el('empty').hidden=visible.length>0;
 }
 el('clear').onclick=el('reset').onclick=()=>{aroma='';el('sort').value='';gender='Todos';el('search').value='';el('brands').value='';render()};el('search').oninput=render;el('brands').onchange=render;
-local[0].ver='9pm.html';const lead=['9AM Dive','Asad','Amber Oud Gold Edition'];const rank=p=>lead.includes(p.name)?lead.indexOf(p.name):3;update(local.sort((a,b)=>rank(a)-rank(b)));
-
-
-
+const lead=['9AM Dive','Asad','Amber Oud Gold Edition'];
+const rank=p=>lead.includes(p.name)?lead.indexOf(p.name):3;
+const copia=leerCatalogo();
+update(copia.length?copia:[...local].sort((a,b)=>rank(a)-rank(b)));
+baseTienda().then(col=>col.orderBy('orden').get()).then(snapshot=>{
+  if(snapshot.empty)return;
+  const frescos=snapshot.docs.map(productoDocumento).sort((a,b)=>(Number(b.destacado===true)-Number(a.destacado===true)) || (Number(a.disponible===false)-Number(b.disponible===false)) || ((a.orden||0)-(b.orden||0)));
+  guardarCatalogo(frescos);
+  if(JSON.stringify(copia)!==JSON.stringify(frescos)) update(frescos);
+}).catch(()=>{});
