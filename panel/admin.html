@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#432635">
+  <title>Inventario · ÉLITÉ</title>
+  <link rel="icon" href="firma.png">
+  <link rel="stylesheet" href="panel.css?v=4">
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script defer src="acentos.js"></script>
+  <script defer src="piramides.js"></script>
+  <script defer src="panel.js?v=4"></script>
+</head>
+<body>
+  <div id="boot" role="status"><span class="boot-mark">É</span> Abriendo el panel…</div>
+  <main id="login" hidden>
+    <div class="login-layout">
+      <div class="atelier-photo" aria-hidden="true"></div>
+      <section class="login-copy">
+        <img class="firma" src="firma-marfil.png" width="600" height="200" alt="ÉLITÉ">
+        <h1>Acceso privado</h1>
+        <p>Ingresa para administrar la colección.</p>
+        <form id="loginForm">
+          <label>Correo electrónico<input id="email" type="email" autocomplete="username" placeholder="tu@correo.com" required></label>
+          <label>Contraseña<input id="pass" type="password" autocomplete="current-password" required></label>
+          <p id="loginErr" class="error" role="alert" hidden></p>
+          <button type="submit" id="authBtn" class="primary">Entrar al panel</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <div id="app" hidden>
+    <header class="bar"><div class="wrap">
+      <div class="identity"><img src="firma-marfil.png" alt="ÉLITÉ" width="600" height="200"><span>Panel privado</span></div>
+      <nav aria-label="Administración"><a id="storeLink" href="https://24gatopa.github.io/yp-essence/borrador-v2/">Ver tienda</a><button id="logout">Salir</button></nav>
+    </div></header>
+    <main class="wrap dashboard">
+      <section class="overview" aria-labelledby="page-title">
+        <div class="overview-copy"><h1 id="page-title">Inventario</h1><p id="stats" role="status">Cargando la colección…</p></div>
+        <button class="primary add" onclick="openForm()"><span aria-hidden="true">+</span> Añadir perfume</button>
+      </section>
+      <div class="metrics" aria-label="Resumen del inventario">
+        <div><i class="icon i-bottle" aria-hidden="true"></i><span>Perfumes<strong id="totalCount">—</strong></span></div>
+        <div><i class="icon i-leaf" aria-hidden="true"></i><span>Disponibles<strong id="availableCount">—</strong></span></div>
+        <div><i class="icon i-amber" aria-hidden="true"></i><span>Destacados<strong id="featuredCount">—</strong></span></div>
+      </div>
+      <section class="collection" aria-labelledby="collection-title">
+        <div class="toolbar"><h2 id="collection-title">Colección</h2>
+          <label><span class="sr">Buscar perfume</span><input id="buscar" type="search" placeholder="Buscar nombre o marca"></label>
+          <label><span class="sr">Filtrar por estado</span><select id="estado"><option value="">Todos los estados</option><option value="available">Disponibles</option><option value="sold">Agotados</option><option value="featured">Destacados</option></select></label>
+        </div>
+        <div id="list"></div>
+        <button id="seedBtn" hidden onclick="seed()" class="secondary">Cargar los 29 iniciales</button>
+      </section>
+    </main>
+  </div>
+  <dialog id="modal" aria-labelledby="modalTitle">
+    <form id="editForm">
+      <header class="edit-head"><h2 id="modalTitle">Añadir perfume</h2><button type="button" aria-label="Cerrar edición" onclick="closeForm()">×</button></header>
+      <div class="edit-body">
+        <div class="photo-field"><div id="photoPrev">Sin foto</div><label>Fotografía<input id="f_photo" type="file" accept="image/*"></label></div>
+        <div class="field-grid">
+          <label>Nombre<input id="f_name" autocomplete="off" required></label>
+          <label>Marca<input id="f_brand"></label>
+          <label>Familia olfativa<input id="f_fam"></label>
+          <label>Género<select id="f_gen"><option>Hombre</option><option>Mujer</option><option>Unisex</option></select></label>
+          <label>Precio (S/)<input id="f_price" type="number" step="0.01" min="0.01" inputmode="decimal" required></label>
+        </div>
+        <section class="notes-editor" aria-labelledby="notes-title">
+          <h3 id="notes-title"><i class="icon i-jasmine" aria-hidden="true"></i>Notas del perfume</h3>
+          <p>Separa cada nota con una coma. Usa «Sin etapa» cuando la marca publique una sola lista.</p>
+          <div class="field-grid" id="noteGroups">
+            <label>Salida<textarea id="notes-salida" rows="2"></textarea></label>
+            <label>Corazón<textarea id="notes-corazon" rows="2"></textarea></label>
+            <label>Fondo<textarea id="notes-fondo" rows="2"></textarea></label>
+            <label>Sin etapa<textarea id="notes-notas" rows="2"></textarea></label>
+          </div>
+          <details id="levels"><summary>Intensidad por nota</summary>
+            <p>Valora la presencia que percibes en una escala de 1 a 5. Puedes conservar la valoración editorial o elegir tu propio nivel.</p>
+            <div id="intensityRows"></div>
+          </details>
+        </section>
+        <fieldset class="switches"><legend>Publicación</legend>
+          <label><input id="f_avail" type="checkbox" checked> Disponible</label>
+          <label><input id="f_feat" type="checkbox"> Destacado</label>
+        </fieldset>
+        <div id="dangerArea" hidden><button type="button" class="remove" onclick="del(editingId)">Eliminar perfume</button></div>
+        <p id="formErr" class="error" role="alert" hidden></p>
+      </div>
+      <footer class="edit-actions"><button type="button" class="secondary" onclick="closeForm()">Cancelar</button><button type="submit" id="saveBtn" class="primary">Guardar</button></footer>
+    </form>
+  </dialog>
+</body>
+</html>
